@@ -3,12 +3,6 @@
 // Ticker functionality for displaying market data
 const tickerContainer = document.getElementById('ticker-container');
 
-// Map display names to DOM id fragments when simple normalization is insufficient
-const MARKET_ID_OVERRIDES = {
-  's&p-500': 'sp500',
-  '10y-treasury': 'treasury'
-};
-
 // Sample market data to use if API fails (as fallback)
 const initialMarketData = [
   { symbol: 'BTC-USD', name: 'Bitcoin', price: 68421.24, change: '+2.5%', isPositive: true },
@@ -22,6 +16,177 @@ const initialMarketData = [
   { symbol: 'JPM', name: 'JPMorgan', price: 198.75, change: '+0.4%', isPositive: true },
   { symbol: 'V', name: 'Visa', price: 276.42, change: '+0.2%', isPositive: true }
 ];
+
+const marketCard = document.querySelector('.financial-data');
+const marketLastUpdatedEl = document.getElementById('market-last-updated');
+const marketRefreshBtn = document.getElementById('market-refresh-btn');
+
+const INDEX_ELEMENT_MAP = {
+  '^GSPC': {
+    value: document.getElementById('sp500-value'),
+    change: document.getElementById('sp500-change'),
+  },
+  '^IXIC': {
+    value: document.getElementById('nasdaq-value'),
+    change: document.getElementById('nasdaq-change'),
+  },
+  '^VIX': {
+    value: document.getElementById('vix-value'),
+    change: document.getElementById('vix-change'),
+  },
+  '^TNX': {
+    value: document.getElementById('treasury-value'),
+    change: document.getElementById('treasury-change'),
+  },
+};
+
+const INDEX_ROW_MAP = {
+  '^GSPC': document.querySelector('.data-row[data-symbol="^GSPC"]'),
+  '^IXIC': document.querySelector('.data-row[data-symbol="^IXIC"]'),
+  '^VIX': document.querySelector('.data-row[data-symbol="^VIX"]'),
+  '^TNX': document.querySelector('.data-row[data-symbol="^TNX"]'),
+};
+
+const rouletteWheel = document.getElementById('roulette-wheel');
+const rouletteResultDisplay = document.getElementById('roulette-result');
+const spinButton = document.getElementById('spin-button');
+
+const ROULETTE_NUMBERS = [
+  { value: 0, color: 'green' },
+  { value: 32, color: 'red' },
+  { value: 15, color: 'black' },
+  { value: 19, color: 'red' },
+  { value: 4, color: 'black' },
+  { value: 21, color: 'red' },
+  { value: 2, color: 'black' },
+  { value: 25, color: 'red' },
+  { value: 17, color: 'black' },
+  { value: 34, color: 'red' },
+  { value: 6, color: 'black' },
+  { value: 27, color: 'red' },
+  { value: 13, color: 'black' },
+  { value: 36, color: 'red' },
+  { value: 11, color: 'black' },
+  { value: 30, color: 'red' },
+  { value: 8, color: 'black' },
+  { value: 23, color: 'red' },
+  { value: 10, color: 'black' },
+  { value: 5, color: 'red' },
+  { value: 24, color: 'black' },
+  { value: 16, color: 'red' },
+  { value: 33, color: 'black' },
+  { value: 1, color: 'red' },
+  { value: 20, color: 'black' },
+  { value: 14, color: 'red' },
+  { value: 31, color: 'black' },
+  { value: 9, color: 'red' },
+  { value: 22, color: 'black' },
+  { value: 18, color: 'red' },
+  { value: 29, color: 'black' },
+  { value: 7, color: 'red' },
+  { value: 28, color: 'black' },
+  { value: 12, color: 'red' },
+  { value: 35, color: 'black' },
+  { value: 3, color: 'red' },
+  { value: 26, color: 'black' }
+];
+
+const POINTER_OFFSET = 90;
+let rouletteInitialized = false;
+let rouletteIsSpinning = false;
+let currentRotation = 0;
+
+function initializeRoulette() {
+  if (!rouletteWheel || rouletteInitialized) {
+    return;
+  }
+
+  const segmentAngle = 360 / ROULETTE_NUMBERS.length;
+  const gradientStops = [];
+
+  ROULETTE_NUMBERS.forEach((entry, index) => {
+    const start = index * segmentAngle;
+    const end = (index + 1) * segmentAngle;
+    const colorHex = entry.color === 'red' ? '#be123c' : entry.color === 'black' ? '#111827' : '#0f9d58';
+    gradientStops.push(`${colorHex} ${start}deg ${end}deg`);
+
+    const label = document.createElement('span');
+    label.className = `roulette-label ${entry.color}`;
+    label.textContent = entry.value;
+
+    const rotation = start + segmentAngle / 2;
+    label.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) translate(0, -44%) rotate(-${rotation}deg)`;
+    rouletteWheel.appendChild(label);
+  });
+
+  rouletteWheel.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+  currentRotation = ((POINTER_OFFSET - (segmentAngle / 2)) % 360 + 360) % 360;
+  rouletteWheel.style.transform = `rotate(${currentRotation}deg)`;
+  rouletteInitialized = true;
+}
+
+function spinRoulette() {
+  if (!rouletteWheel || rouletteIsSpinning) {
+    return;
+  }
+
+  rouletteIsSpinning = true;
+
+  if (spinButton) {
+    spinButton.disabled = true;
+  }
+
+  if (rouletteResultDisplay) {
+    rouletteResultDisplay.textContent = 'Spinning…';
+    rouletteResultDisplay.classList.remove('win-red', 'win-black', 'win-green');
+  }
+
+  const segmentAngle = 360 / ROULETTE_NUMBERS.length;
+  const targetIndex = Math.floor(Math.random() * ROULETTE_NUMBERS.length);
+  const target = ROULETTE_NUMBERS[targetIndex];
+  const targetAngle = targetIndex * segmentAngle + segmentAngle / 2;
+  const targetNormalized = ((POINTER_OFFSET - targetAngle) % 360 + 360) % 360;
+
+  let diff = targetNormalized - currentRotation;
+  if (diff <= 0) {
+    diff += 360;
+  }
+
+  const spinTurns = Math.floor(Math.random() * 4) + 4;
+  const finalRotation = currentRotation + spinTurns * 360 + diff;
+
+  rouletteWheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+  rouletteWheel.style.transform = `rotate(${finalRotation}deg)`;
+
+  const spinDuration = 4000;
+
+  window.setTimeout(() => {
+    currentRotation = targetNormalized;
+    rouletteWheel.style.transition = 'none';
+    rouletteWheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        rouletteWheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+      });
+    });
+
+    if (rouletteResultDisplay) {
+      rouletteResultDisplay.textContent = `Result: ${target.value} (${target.color.toUpperCase()})`;
+      rouletteResultDisplay.classList.add(`win-${target.color}`);
+    }
+
+    if (spinButton) {
+      spinButton.disabled = false;
+    }
+
+    rouletteIsSpinning = false;
+  }, spinDuration);
+}
+
+if (spinButton) {
+  spinButton.addEventListener('click', spinRoulette);
+}
 
 // Populate ticker with data
 function populateTickerWithData(data) {
@@ -65,29 +230,94 @@ async function fetchMarketData() {
 }
 
 // Update market indices in the financial dashboard
-async function updateMarketIndices() {
+async function updateMarketIndices(options = {}) {
+  const { userInitiated = false } = options;
+
+  if (marketCard) {
+    marketCard.classList.add('is-loading');
+  }
+  if (userInitiated && marketRefreshBtn) {
+    marketRefreshBtn.classList.add('spinning');
+    marketRefreshBtn.disabled = true;
+    marketRefreshBtn.setAttribute('aria-busy', 'true');
+  }
+  if (userInitiated && marketLastUpdatedEl) {
+    marketLastUpdatedEl.textContent = 'Refreshing…';
+  }
+
   try {
-    const response = await fetch('/market-indices');
+    const response = await fetch('/market-indices', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const data = await response.json();
-    
-    // Update each index with real-time data
-    data.forEach(item => {
-  const normalizedName = item.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  const elementId = `${MARKET_ID_OVERRIDES[normalizedName] || normalizedName}-value`;
-  const element = document.getElementById(elementId);
-      
-      if (element) {
-        element.innerHTML = `${item.value} <span style="color: ${item.isPositive ? '#0acf97' : '#fa5c7c'}">${item.change}</span>`;
+
+    const payload = await response.json();
+    let indices = [];
+    if (payload && Array.isArray(payload.indices)) {
+      indices = payload.indices;
+    } else if (Array.isArray(payload)) {
+      indices = payload;
+    }
+
+    indices.forEach(item => {
+      const slots = INDEX_ELEMENT_MAP[item.symbol];
+      if (!slots) {
+        return;
+      }
+
+      if (slots.value) {
+        slots.value.textContent = item.value != null ? item.value : 'N/A';
+        slots.value.dataset.rawValue = item.rawValue != null ? item.rawValue : '';
+        slots.value.dataset.previousClose = item.rawPrevious != null ? item.rawPrevious : '';
+      }
+
+      if (slots.change) {
+        const changeText = item.change != null ? item.change : '--';
+        slots.change.textContent = changeText;
+        slots.change.classList.toggle('positive', !!item.isPositive);
+        slots.change.classList.toggle('negative', !item.isPositive);
+      }
+
+      const row = INDEX_ROW_MAP[item.symbol];
+      if (row) {
+        row.dataset.trend = item.isPositive ? 'up' : 'down';
+        row.dataset.changeType = item.changeType || '';
       }
     });
-    
+
+    if (!indices.length && marketLastUpdatedEl) {
+      marketLastUpdatedEl.textContent = 'No market data available';
+    }
+
+    if (marketLastUpdatedEl) {
+      if (payload && payload.asOf) {
+        const updatedDate = new Date(payload.asOf);
+        const timeString = updatedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateString = updatedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        marketLastUpdatedEl.textContent = `Last update: ${dateString} ${timeString}`;
+        marketLastUpdatedEl.dataset.timestamp = payload.asOf;
+      } else {
+        marketLastUpdatedEl.textContent = 'Last update: just now';
+        delete marketLastUpdatedEl.dataset.timestamp;
+      }
+    }
+
     return true;
   } catch (error) {
     console.error('Error updating market indices:', error);
+    if (marketLastUpdatedEl) {
+      marketLastUpdatedEl.textContent = 'Unable to refresh data';
+    }
     return false;
+  } finally {
+    if (marketCard) {
+      marketCard.classList.remove('is-loading');
+    }
+    if (marketRefreshBtn) {
+      marketRefreshBtn.classList.remove('spinning');
+      marketRefreshBtn.removeAttribute('aria-busy');
+      marketRefreshBtn.disabled = false;
+    }
   }
 }
 
@@ -102,6 +332,18 @@ setInterval(() => {
   fetchMarketData();
 }, 60000);
 
+// Prime market indices immediately and on an interval
+updateMarketIndices();
+setInterval(() => {
+  updateMarketIndices();
+}, 60000);
+
+if (marketRefreshBtn) {
+  marketRefreshBtn.addEventListener('click', () => {
+    updateMarketIndices({ userInitiated: true });
+  });
+}
+
 // element toggle function
 const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
 
@@ -112,42 +354,46 @@ const sidebarBtn = document.querySelector("[data-sidebar-btn]");
 // sidebar toggle functionality for mobile
 sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
 
-// testimonials variables
+// testimonials (optional, only if elements exist on the page)
 const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
 const modalContainer = document.querySelector("[data-modal-container]");
 const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
 const overlay = document.querySelector("[data-overlay]");
 
-// modal variable
-const modalImg = document.querySelector("[data-modal-img]");
-const modalTitle = document.querySelector("[data-modal-title]");
-const modalText = document.querySelector("[data-modal-text]");
+if (modalContainer && modalCloseBtn && overlay && testimonialsItem.length) {
+  const modalImg = document.querySelector("[data-modal-img]");
+  const modalTitle = document.querySelector("[data-modal-title]");
+  const modalText = document.querySelector("[data-modal-text]");
 
-// modal toggle function
-const testimonialsModalFunc = function () {
-  modalContainer.classList.toggle("active");
-  overlay.classList.toggle("active");
+  const testimonialsModalFunc = function () {
+    modalContainer.classList.toggle("active");
+    overlay.classList.toggle("active");
+  };
+
+  for (let i = 0; i < testimonialsItem.length; i++) {
+    testimonialsItem[i].addEventListener("click", function () {
+      const avatar = this.querySelector("[data-testimonials-avatar]");
+      const title = this.querySelector("[data-testimonials-title]");
+      const text = this.querySelector("[data-testimonials-text]");
+
+      if (avatar && modalImg) {
+        modalImg.src = avatar.src;
+        modalImg.alt = avatar.alt;
+      }
+      if (title && modalTitle) {
+        modalTitle.innerHTML = title.innerHTML;
+      }
+      if (text && modalText) {
+        modalText.innerHTML = text.innerHTML;
+      }
+
+      testimonialsModalFunc();
+    });
+  }
+
+  modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+  overlay.addEventListener("click", testimonialsModalFunc);
 }
-
-// add click event to all modal items
-for (let i = 0; i < testimonialsItem.length; i++) {
-
-  testimonialsItem[i].addEventListener("click", function () {
-
-    modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
-    modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
-    modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
-    modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
-
-    testimonialsModalFunc();
-
-  });
-
-}
-
-// add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
 
 // custom select variables
 const select = document.querySelector("[data-select]");
@@ -248,244 +494,27 @@ for (let i = 0; i < navigationLinks.length; i++) {
   });
 }
 
-// Initialize market chart when projects page is active
+// Initialize roulette when projects page is active
 document.addEventListener('DOMContentLoaded', function() {
-  const navigationLinks = document.querySelectorAll("[data-nav-link]");
-  
-  for (let i = 0; i < navigationLinks.length; i++) {
-    navigationLinks[i].addEventListener("click", function() {
+  initializeRoulette();
+
+  const navigationLinks = document.querySelectorAll('[data-nav-link]');
+  navigationLinks.forEach(link => {
+    link.addEventListener('click', function() {
       if (this.innerHTML.toLowerCase() === 'projects') {
         setTimeout(() => {
-          initializeMarketChart();
+          initializeRoulette();
           updateMarketIndices();
-        }, 300); // Small delay to ensure the canvas is visible
+        }, 250);
       }
     });
-  }
-  
-  // Check if we should initialize on page load (if projects page is already active)
+  });
+
   if (document.querySelector('.projects.active')) {
     setTimeout(() => {
-      initializeMarketChart();
+      initializeRoulette();
       updateMarketIndices();
-    }, 300);
+    }, 250);
   }
 });
 
-// Function to initialize the market chart with real data
-async function initializeMarketChart() {
-  const ctx = document.getElementById('marketChart');
-  
-  // Check if the chart already exists
-  if (window.marketChart) {
-    window.marketChart.destroy();
-  }
-  
-  try {
-    // Try to fetch real historical data from our API
-    const response = await fetch('/historical-data');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    
-    const historicalData = await response.json();
-    
-    // Create the chart with real data
-    window.marketChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: historicalData.dates,
-        datasets: [
-          {
-            label: 'S&P 500',
-            data: historicalData.sp500,
-            borderColor: 'rgba(79, 209, 197, 1)',
-            backgroundColor: 'rgba(79, 209, 197, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4
-          },
-          {
-            label: 'NASDAQ',
-            data: historicalData.nasdaq,
-            borderColor: 'rgba(255, 193, 7, 1)',
-            backgroundColor: 'rgba(255, 193, 7, 0.05)',
-            borderWidth: 1.5,
-            fill: false,
-            tension: 0.4,
-            hidden: true
-          },
-          {
-            label: 'Bitcoin',
-            data: historicalData.bitcoin,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.05)',
-            borderWidth: 1.5,
-            fill: false,
-            tension: 0.4,
-            hidden: true
-          }
-        ]
-      },
-      options: createChartOptions()
-    });
-  } catch (error) {
-    console.error('Error fetching historical data:', error);
-    
-    // Fallback to generated data
-    const dates = generateDateRange(180);
-    const spData = generateMarketData(3500, 5200, 180, 0.6);
-    const nasdaqData = generateMarketData(11000, 16500, 180, 0.7);
-    const btcData = generateMarketData(35000, 68000, 180, 1.5);
-    
-    // Create chart with fallback data
-    window.marketChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: dates,
-        datasets: [
-          {
-            label: 'S&P 500',
-            data: spData,
-            borderColor: 'rgba(79, 209, 197, 1)',
-            backgroundColor: 'rgba(79, 209, 197, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4
-          },
-          {
-            label: 'NASDAQ',
-            data: nasdaqData,
-            borderColor: 'rgba(255, 193, 7, 1)',
-            backgroundColor: 'rgba(255, 193, 7, 0.05)',
-            borderWidth: 1.5,
-            fill: false,
-            tension: 0.4,
-            hidden: true
-          },
-          {
-            label: 'Bitcoin',
-            data: btcData,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.05)',
-            borderWidth: 1.5,
-            fill: false,
-            tension: 0.4,
-            hidden: true
-          }
-        ]
-      },
-      options: createChartOptions()
-    });
-  }
-}
-
-// Chart.js options
-function createChartOptions() {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: 'rgba(255, 255, 255, 0.7)',
-          font: {
-            family: "'Roboto Mono', monospace",
-            size: 11
-          }
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(33, 43, 54, 0.95)',
-        titleFont: { family: "'Roboto Mono', monospace" },
-        bodyFont: { family: "'Roboto Mono', monospace" },
-        displayColors: false,
-        callbacks: {
-          label: function(context) {
-            let label = context.dataset.label || '';
-            if (label) {
-              label += ': $';
-            }
-            if (context.parsed.y !== null) {
-              label += new Intl.NumberFormat('en-US').format(context.parsed.y.toFixed(2));
-            }
-            return label;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.05)'
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.5)',
-          maxTicksLimit: 8,
-          font: {
-            family: "'Roboto Mono', monospace",
-            size: 10
-          }
-        }
-      },
-      y: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.05)'
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.5)',
-          callback: function(value) {
-            return '$' + value.toLocaleString();
-          },
-          font: {
-            family: "'Roboto Mono', monospace",
-            size: 10
-          }
-        }
-      }
-    }
-  };
-}
-
-// Helper function to generate dates going back X days
-function generateDateRange(days) {
-  const dates = [];
-  const today = new Date();
-  
-  for (let i = days; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-  }
-  
-  return dates;
-}
-
-// Helper function to generate realistic looking market data
-function generateMarketData(startPrice, endPrice, days, volatility) {
-  const data = [];
-  let price = startPrice;
-  
-  // Generate a somewhat realistic trend from start to end price
-  const trend = (endPrice - startPrice) / days;
-  
-  for (let i = 0; i <= days; i++) {
-    // Add some random volatility
-    const change = (Math.random() - 0.5) * volatility * price / 100;
-    price = price + trend + change;
-    
-    // Add some market corrections every so often
-    if (i % 30 === 0 && i > 0) {
-      price = price * (1 - (Math.random() * 0.05)); // Occasional dip
-    }
-    
-    data.push(price);
-  }
-  
-  return data;
-}

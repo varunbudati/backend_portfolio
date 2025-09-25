@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from typing import Dict, Iterable, Tuple
 
 import numpy as np
 import yfinance as yf
@@ -6,6 +7,67 @@ from flask import Flask, jsonify, render_template
 
 
 app = Flask(__name__)
+
+
+_PRICE_CACHE: Dict[str, Tuple[datetime, Tuple[float | None, float | None]]] = {}
+_CACHE_TTL = timedelta(minutes=2)
+
+
+INDEX_FALLBACKS: Dict[str, dict] = {
+    "^GSPC": {
+        "symbol": "^GSPC",
+        "name": "S&P 500",
+        "rawValue": 6604.72,
+        "rawPrevious": 6556.07,
+        "rawChange": 0.74,
+        "changeType": "percent",
+        "isPositive": True,
+    },
+    "^IXIC": {
+        "symbol": "^IXIC",
+        "name": "NASDAQ",
+        "rawValue": 22384.70,
+        "rawPrevious": 22108.60,
+        "rawChange": 1.25,
+        "changeType": "percent",
+        "isPositive": True,
+    },
+    "^VIX": {
+        "symbol": "^VIX",
+        "name": "VIX",
+        "rawValue": 16.72,
+        "rawPrevious": 17.53,
+        "rawChange": -4.67,
+        "changeType": "percent",
+        "isPositive": True,
+    },
+    "^TNX": {
+        "symbol": "^TNX",
+        "name": "10Y Treasury",
+        "rawValue": 4.176,
+        "rawPrevious": 4.156,
+        "rawChange": 0.02,
+        "changeType": "absolute",
+        "isPositive": True,
+    },
+}
+
+
+def _format_index_value(symbol: str, raw_value: float | None) -> str:
+    if raw_value is None:
+        return "--"
+    if symbol == "^TNX":
+        return f"{raw_value:.3f}%"
+    return f"{raw_value:,.2f}"
+
+
+def _format_index_change(symbol: str, raw_change: float | None, *, change_type: str) -> str:
+    if raw_change is None:
+        return "0.00%" if change_type == "percent" else "0.00"
+    sign = "+" if raw_change >= 0 else ""
+    if change_type == "absolute":
+        return f"{sign}{raw_change:.3f}"
+    return f"{sign}{raw_change:.2f}%"
 
 
 FALLBACK_DATA = [
@@ -44,42 +106,30 @@ def home() -> str:
 
 @app.route("/ticker", methods=["GET"])
 def get_ticker_data():
-    try:
-        now = datetime.now()
-        start_date = (now - timedelta(days=1)).strftime("%Y-%m-%d")
-        end_date = now.strftime("%Y-%m-%d")
+    price_map = _fetch_recent_closes(TICKER_SYMBOLS, period_days=5)
 
-        data = yf.download(TICKER_SYMBOLS, start=start_date, end=end_date, progress=False, threads=False)
+    response = []
+    for symbol in TICKER_SYMBOLS:
+        latest_price, previous_price = price_map.get(symbol, (None, None))
 
-        response = []
-        for symbol in TICKER_SYMBOLS:
-            try:
-                close_series = data["Close"][symbol]
-                latest_price = float(close_series.iloc[-1])
-                previous_price = float(close_series.iloc[0])
+        if latest_price is not None and previous_price is not None and previous_price != 0:
+            percent_change = ((latest_price - previous_price) / previous_price) * 100
+            change_str = f"{'+' if percent_change >= 0 else ''}{percent_change:.2f}%"
+            response.append(
+                {
+                    "symbol": symbol,
+                    "name": TICKER_NAMES.get(symbol, symbol),
+                    "price": round(latest_price, 2),
+                    "change": change_str,
+                    "isPositive": percent_change >= 0,
+                }
+            )
+        else:
+            fallback = next((item for item in FALLBACK_DATA if item["symbol"] == symbol), None)
+            if fallback:
+                response.append(fallback)
 
-                percent_change = ((latest_price - previous_price) / previous_price) * 100
-                change_str = f"{'+' if percent_change >= 0 else ''}{percent_change:.2f}%"
-
-                response.append(
-                    {
-                        "symbol": symbol,
-                        "name": TICKER_NAMES.get(symbol, symbol),
-                        "price": round(latest_price, 2),
-                        "change": change_str,
-                        "isPositive": percent_change >= 0,
-                    }
-                )
-            except (KeyError, IndexError, ValueError):
-                fallback = next((item for item in FALLBACK_DATA if item["symbol"] == symbol), None)
-                if fallback:
-                    response.append(fallback)
-
-        return jsonify(response)
-
-    except Exception as exc:  # pragma: no cover - defensive fallback
-        app.logger.warning("Ticker fetch failed: %s", exc)
-        return jsonify(FALLBACK_DATA)
+    return jsonify(response)
 
 
 @app.route("/market-indices", methods=["GET"])
@@ -87,58 +137,86 @@ def get_market_indices():
     indices = ["^GSPC", "^IXIC", "^VIX", "^TNX"]
     names = ["S&P 500", "NASDAQ", "VIX", "10Y Treasury"]
 
-    try:
-        now = datetime.now()
-        start_date = (now - timedelta(days=1)).strftime("%Y-%m-%d")
-        end_date = now.strftime("%Y-%m-%d")
+    price_map = _fetch_recent_closes(indices, period_days=5)
+    app.logger.debug("Market indices raw prices: %s", price_map)
 
-        data = yf.download(indices, start=start_date, end=end_date, progress=False, threads=False)
+    response = []
+    for idx, symbol in enumerate(indices):
+        latest_price, previous_price = price_map.get(symbol, (None, None))
 
-        response = []
-        for idx, symbol in enumerate(indices):
-            try:
-                close_series = data["Close"][symbol]
-                latest_price = float(close_series.iloc[-1])
-                previous_price = float(close_series.iloc[0])
+        if latest_price is None or previous_price is None:
+            app.logger.debug("Falling back for %s due to missing data %s", symbol, (latest_price, previous_price))
+            response.append(_index_fallback(symbol))
+            continue
 
-                percent_change = ((latest_price - previous_price) / previous_price) * 100
-                change_str = f"{'+' if percent_change >= 0 else ''}{percent_change:.2f}%"
+        try:
+            percent_change = ((latest_price - previous_price) / previous_price) * 100 if previous_price else 0.0
+            change_str = f"{'+' if percent_change >= 0 else ''}{percent_change:.2f}%"
 
-                if symbol == "^TNX":
-                    value_str = f"{latest_price:.2f}%"
-                    change_value = latest_price - previous_price
-                    change_str = f"{'+' if change_value >= 0 else ''}{change_value:.2f}"
-                else:
-                    value_str = f"{latest_price:.2f}"
+            if symbol == "^TNX":
+                value_str = f"{latest_price:.2f}%"
+                change_value = latest_price - previous_price
+                change_str = f"{'+' if change_value >= 0 else ''}{change_value:.2f}"
+            else:
+                value_str = f"{latest_price:.2f}"
 
-                response.append(
-                    {
-                        "name": names[idx],
-                        "value": value_str,
-                        "change": change_str,
-                        "isPositive": (percent_change >= 0) if symbol != "^VIX" else (percent_change < 0),
-                    }
-                )
-            except (KeyError, IndexError, ValueError):
-                response.append(_index_fallback(symbol))
+            change_type = "absolute" if symbol == "^TNX" else "percent"
+            raw_change = (latest_price - previous_price) if change_type == "absolute" else percent_change
+            response.append(
+                {
+                    "symbol": symbol,
+                    "name": names[idx],
+                    "value": value_str,
+                    "change": _format_index_change(symbol, raw_change, change_type=change_type),
+                    "isPositive": (percent_change >= 0) if symbol != "^VIX" else (percent_change < 0),
+                    "rawValue": latest_price,
+                    "rawPrevious": previous_price,
+                    "rawChange": raw_change,
+                    "changeType": change_type,
+                }
+            )
+        except Exception:  # pragma: no cover - fallback to static data on unexpected edge cases
+            app.logger.exception("Failed to process index %s", symbol)
+            response.append(_index_fallback(symbol))
 
-        return jsonify(response)
-
-    except Exception as exc:  # pragma: no cover - defensive fallback
-        app.logger.warning("Market index fetch failed: %s", exc)
-        return jsonify([_index_fallback(symbol) for symbol in indices])
+    payload = {
+        "indices": response,
+        "asOf": datetime.now(timezone.utc).isoformat(),
+    }
+    app.logger.debug("Market indices response payload: %s", payload)
+    return jsonify(payload)
 
 
 def _index_fallback(symbol: str) -> dict:
-    if symbol == "^GSPC":
-        return {"name": "S&P 500", "value": "5,203.58", "change": "+0.74%", "isPositive": True}
-    if symbol == "^IXIC":
-        return {"name": "NASDAQ", "value": "16,428.82", "change": "+1.25%", "isPositive": True}
-    if symbol == "^VIX":
-        return {"name": "VIX", "value": "16.72", "change": "-4.67%", "isPositive": True}
-    if symbol == "^TNX":
-        return {"name": "10Y Treasury", "value": "4.32%", "change": "-0.02", "isPositive": True}
-    return {"name": symbol, "value": "N/A", "change": "0.00%", "isPositive": True}
+    fallback = INDEX_FALLBACKS.get(symbol)
+    if fallback is None:
+        return {
+            "symbol": symbol,
+            "name": symbol,
+            "value": "N/A",
+            "change": "0.00%",
+            "isPositive": True,
+            "rawValue": None,
+            "rawPrevious": None,
+            "rawChange": None,
+            "changeType": "percent",
+        }
+
+    raw_value = fallback["rawValue"]
+    raw_change = fallback["rawChange"]
+    change_type = fallback["changeType"]
+
+    return {
+        "symbol": fallback["symbol"],
+        "name": fallback["name"],
+        "value": _format_index_value(symbol, raw_value),
+        "change": _format_index_change(symbol, raw_change, change_type=change_type),
+        "isPositive": fallback["isPositive"],
+        "rawValue": raw_value,
+        "rawPrevious": fallback["rawPrevious"],
+        "rawChange": raw_change,
+        "changeType": change_type,
+    }
 
 
 @app.route("/historical-data", methods=["GET"])
@@ -186,6 +264,73 @@ def _generate_historical_fallback() -> dict:
         "nasdaq": generate_series(11000, 16500, 0.025),
         "bitcoin": generate_series(35000, 68000, 0.05),
     }
+
+
+def _fetch_recent_closes(symbols: Iterable[str], *, period_days: int) -> Dict[str, Tuple[float | None, float | None]]:
+    """Fetch the most recent and previous close for each symbol using yfinance.
+
+    Returns a mapping of symbol -> (latest_close, previous_close). If insufficient
+    data is available, the tuple values will be ``(None, None)``.
+    """
+
+    results: Dict[str, Tuple[float | None, float | None]] = {}
+    period = max(period_days, 2)
+    now = datetime.now(timezone.utc)
+
+    for symbol in symbols:
+        cached = _PRICE_CACHE.get(symbol)
+        if cached and now - cached[0] < _CACHE_TTL:
+            results[symbol] = cached[1]
+            continue
+
+        latest_close, previous_close = _fetch_symbol_closes(symbol, period)
+        results[symbol] = (latest_close, previous_close)
+
+        if latest_close is not None and previous_close is not None:
+            _PRICE_CACHE[symbol] = (now, (latest_close, previous_close))
+
+    return results
+
+
+def _fetch_symbol_closes(symbol: str, period: int) -> Tuple[float | None, float | None]:
+    try:
+        history = yf.Ticker(symbol).history(
+            period=f"{period}d",
+            interval="1d",
+            auto_adjust=False,
+            actions=False,
+        )
+
+        closes = history.get("Close")
+        if closes is not None and not closes.dropna().empty:
+            closes = closes.dropna()
+            latest_close = float(closes.iloc[-1])
+            previous_close = float(closes.iloc[-2]) if len(closes) >= 2 else latest_close
+            return latest_close, previous_close
+    except Exception as exc:
+        app.logger.debug("Ticker.history failed for %s: %s", symbol, exc)
+
+    try:
+        frame = yf.download(
+            symbol,
+            period=f"{period}d",
+            interval="1d",
+            progress=False,
+            threads=False,
+            auto_adjust=False,
+        )
+
+        if not frame.empty:
+            closes = frame["Close"] if "Close" in frame else frame.iloc[:, 3]
+            closes = closes.dropna()
+            if not closes.empty:
+                latest_close = float(closes.iloc[-1])
+                previous_close = float(closes.iloc[-2]) if len(closes) >= 2 else latest_close
+                return latest_close, previous_close
+    except Exception as exc:
+        app.logger.debug("yf.download failed for %s: %s", symbol, exc)
+
+    return None, None
 
 
 if __name__ == "__main__":  # pragma: no cover

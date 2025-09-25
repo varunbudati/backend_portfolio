@@ -28,43 +28,6 @@
     });
   }
 
-  // Market Ticker Script
-  const tickerContainer = document.getElementById('ticker-container');
-  if (tickerContainer) {
-    const marketData = [
-      { symbol: 'AAPL', price: 150.25, change: '+1.52%' },
-      { symbol: 'GOOGL', price: 2750.80, change: '-0.75%' },
-      { symbol: 'MSFT', price: 305.40, change: '+0.95%' },
-      { symbol: 'AMZN', price: 3400.10, change: '+2.10%' },
-      { symbol: 'TSLA', price: 700.60, change: '-3.20%' },
-      { symbol: 'NVDA', price: 200.50, change: '+4.50%' },
-      { symbol: 'SPY', price: 450.30, change: '+0.80%' },
-      { symbol: 'QQQ', price: 380.90, change: '+1.10%' },
-      { symbol: 'IWM', price: 220.40, change: '+0.60%' },
-      { symbol: 'VIX', price: 16.50, change: '-5.50%' }
-    ];
-
-    function createTickerItem(item) {
-      const changeClass = item.change.startsWith('+') ? 'positive' : 'negative';
-      return `
-        <div class="ticker-item">
-          <span class="ticker-symbol">${item.symbol}</span>
-          <span class="ticker-price">${Number(item.price).toFixed(2)}</span>
-          <span class="ticker-change ${changeClass}">${item.change}</span>
-        </div>
-      `;
-    }
-
-    function populateTicker() {
-      const tickerContent = [...marketData, ...marketData, ...marketData, ...marketData]
-        .map(createTickerItem)
-        .join('');
-      tickerContainer.innerHTML = tickerContent;
-    }
-
-    populateTicker();
-  }
-
   // Terminal script (skills)
   const terminal = document.getElementById('terminal');
   if (terminal) {
@@ -121,43 +84,6 @@
 
     typeLine();
   }
-
-  // Financial Dashboard
-  const sp500Value = document.getElementById('sp500-value');
-  const nasdaqValue = document.getElementById('nasdaq-value');
-  const vixValue = document.getElementById('vix-value');
-  const treasuryValue = document.getElementById('treasury-value');
-
-  function updateMarketData() {
-    if (!(sp500Value && nasdaqValue && vixValue && treasuryValue)) return;
-    const baseSP = 5203.58;
-    const baseNas = 16428.82;
-    const baseVix = 16.72;
-    const baseTreas = 4.32;
-
-    // S&P 500
-    const sp500 = baseSP * (1 + (Math.random() - 0.5) * 0.01);
-    const sp500Change = ((sp500 / baseSP) - 1) * 100;
-    sp500Value.innerHTML = `${sp500.toFixed(2)} <span style="color: ${sp500Change >= 0 ? '#0acf97' : '#fa5c7c'};">${sp500Change.toFixed(2)}%</span>`;
-
-    // NASDAQ
-    const nasdaq = baseNas * (1 + (Math.random() - 0.5) * 0.015);
-    const nasdaqChange = ((nasdaq / baseNas) - 1) * 100;
-    nasdaqValue.innerHTML = `${nasdaq.toFixed(2)} <span style="color: ${nasdaqChange >= 0 ? '#0acf97' : '#fa5c7c'};">${nasdaqChange.toFixed(2)}%</span>`;
-
-    // VIX (inverse color scheme)
-    const vix = baseVix * (1 + (Math.random() - 0.5) * 0.05);
-    const vixChange = ((vix / baseVix) - 1) * 100;
-    vixValue.innerHTML = `${vix.toFixed(2)} <span style="color: ${vixChange >= 0 ? '#fa5c7c' : '#0acf97'};">${vixChange.toFixed(2)}%</span>`;
-
-    // 10Y Treasury (bps-like)
-    const treasury = baseTreas + (Math.random() - 0.5) * 0.1;
-    const treasuryChange = treasury - baseTreas;
-    treasuryValue.innerHTML = `${treasury.toFixed(2)}% <span style="color: ${treasuryChange >= 0 ? '#fa5c7c' : '#0acf97'};">${treasuryChange.toFixed(2)}</span>`;
-  }
-
-  setInterval(updateMarketData, 2000);
-  updateMarketData();
 
   // Chart.js line chart if canvas exists
   const canvas = document.getElementById('marketChart');

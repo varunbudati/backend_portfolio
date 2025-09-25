@@ -15,8 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="theme-dark">
@@ -139,28 +137,108 @@
         </section>
 
         <section class="service">
-          <h3 class="h3 service-title">My Interests</h3>
+          <h3 class="h3 service-title">My Kittens!</h3>
 
-          <div class="interest-slider" id="interest-slider" aria-label="Interests slideshow" role="region">
-            <figure class="slide active">
-              <img src="{{ url_for('static', filename='images/varun-budati.jpeg') }}" alt="At Virginia Tech" loading="lazy" />
-              <figcaption>Virginia Tech</figcaption>
+          <div class="interest-slider interest-gallery" id="interest-slider" aria-label="Interests slideshow" role="region">
+            <figure class="slide gallery-item active">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_5870.jpg') }}" alt="Kitten lounging on a blanket" loading="lazy" />
+              <figcaption>Cozy Lounger</figcaption>
             </figure>
-            <figure class="slide">
-              <img src="{{ url_for('static', filename='images/market.png') }}" alt="Financial Markets" loading="lazy" />
-              <figcaption>Markets &amp; Trading</figcaption>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_5913.jpg') }}" alt="Close-up portrait of a curious kitten" loading="lazy" />
+              <figcaption>Curious Portrait</figcaption>
             </figure>
-            <figure class="slide">
-              <img src="{{ url_for('static', filename='images/math.png') }}" alt="Mathematics" loading="lazy" />
-              <figcaption>Mathematics</figcaption>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_5918.jpg') }}" alt="Kitten watching through a window" loading="lazy" />
+              <figcaption>Window Watcher</figcaption>
             </figure>
-            <figure class="slide">
-              <img src="{{ url_for('static', filename='images/code.png') }}" alt="Programming" loading="lazy" />
-              <figcaption>Programming</figcaption>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6076.jpg') }}" alt="Playful kitten with a toy" loading="lazy" />
+              <figcaption>Playtime</figcaption>
             </figure>
-            <figure class="slide">
-              <img src="{{ url_for('static', filename='images/guitar.png') }}" alt="Music" loading="lazy" />
-              <figcaption>Music</figcaption>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6150.jpg') }}" alt="Adventurous kitten exploring outdoors" loading="lazy" />
+              <figcaption>Backyard Explorer</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6179.jpg') }}" alt="Kitten relaxing on a cushion" loading="lazy" />
+              <figcaption>Sunny Rest</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6228.jpg') }}" alt="Kitten looking up with bright eyes" loading="lazy" />
+              <figcaption>Bright Eyes</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6300.jpg') }}" alt="Kitten stretching out comfortably" loading="lazy" />
+              <figcaption>Morning Stretch</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6305.jpg') }}" alt="Kitten sitting attentively" loading="lazy" />
+              <figcaption>Attentive Pose</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6378.jpg') }}" alt="Kitten peeking over a ledge" loading="lazy" />
+              <figcaption>Peekaboo</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6409.jpg') }}" alt="Kitten lying on patterned fabric" loading="lazy" />
+              <figcaption>Patterned Paws</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6514.jpg') }}" alt="Kitten gazing off camera" loading="lazy" />
+              <figcaption>Soft Gaze</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6650.jpg') }}" alt="Kitten curled into a ball" loading="lazy" />
+              <figcaption>Curled Up</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6673.jpg') }}" alt="Kitten with bright sunlight" loading="lazy" />
+              <figcaption>Sunlit Whiskers</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6730.jpg') }}" alt="Kitten ready to pounce" loading="lazy" />
+              <figcaption>Ready to Pounce</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6747.jpg') }}" alt="Kitten lounging on the floor" loading="lazy" />
+              <figcaption>Floor Lounger</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6784.jpg') }}" alt="Kitten resting near a window" loading="lazy" />
+              <figcaption>Window Nap</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6786.jpg') }}" alt="Kitten staring intently" loading="lazy" />
+              <figcaption>Focused Friend</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6821.jpg') }}" alt="Kitten curled on a sofa" loading="lazy" />
+              <figcaption>Sofa Snuggle</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6852.jpg') }}" alt="Kitten resting with paws tucked" loading="lazy" />
+              <figcaption>Paws Tucked</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6883.jpg') }}" alt="Kitten basking in sunlight" loading="lazy" />
+              <figcaption>Sunbeam Dream</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6890.jpg') }}" alt="Kitten relaxing on a rug" loading="lazy" />
+              <figcaption>Rug Lounge</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6897.jpg') }}" alt="Kitten stretching paws" loading="lazy" />
+              <figcaption>Paw Stretch</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_6976.jpg') }}" alt="Kitten relaxing by a window" loading="lazy" />
+              <figcaption>Window Lounge</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/cat-images/web/IMG_7046.jpg') }}" alt="Kitten with gentle expression" loading="lazy" />
+              <figcaption>Gentle Gaze</figcaption>
             </figure>
           </div>
         </section>
@@ -226,28 +304,62 @@
 
           <ol class="timeline-list">
             <li class="timeline-item">
-              <h4 class="h4 timeline-item-title">Quantitative Researcher, DLQF Lab At Virginia Tech</h4>
-              <span>October 2024 — Present</span>
-              <p class="timeline-text">• Collaborating with researchers on Order Execution &amp; Optimization, focusing on market microstructure analysis and strategy implementation.</p>
-              <p class="timeline-text">• Implementing execution algorithms and optimization methods in Python to understand market impact and transaction costs.</p>
-              <p class="timeline-text">• Conducting literature reviews on market making strategies and optimal execution techniques.</p>
-              <p class="timeline-text">• Developing quantitative models to analyze trade execution efficiency using statistical methods.</p>
+              <h4 class="h4 timeline-item-title">Treasurer — FinTech Club</h4>
+              <span>Jun 2025 — Present · 4 mos</span>
+              <p class="timeline-text">• Manage the club’s budget and all financial operations to fund initiatives and workshops for a community of 100+ members.</p>
+              <p class="timeline-text">• Organize and host speaker events with industry professionals from leading finance and technology firms to create career development and networking opportunities.</p>
             </li>
 
             <li class="timeline-item">
-              <h4 class="h4 timeline-item-title">Research Assistant - REACH Lab At Virginia Tech</h4>
-              <span>March 2024 — Present</span>
-              <p class="timeline-text">• Conducted an extensive literature review under Dr. Ihudiya Finda Williams on Rural Computer Science Education.</p>
-              <p class="timeline-text">• Synthesized 80+ articles to support a $500,000 NSF grant proposal.</p>
-              <p class="timeline-text">• Trained research assistants on database search methodologies and literature review techniques.</p>
+              <h4 class="h4 timeline-item-title">Quantitative Researcher</h4>
+              <span>Oct 2024 — Present</span>
+              <p class="timeline-text">• Researching optimal order execution by analyzing the market microstructure of Bitcoin trade data to develop and implement advanced trading strategies.</p>
+              <p class="timeline-text">• Constructed benchmark execution algorithms in Python, including VWAP and TWAP, to analyze the market impact and transaction costs of trading Bitcoin.</p>
+              <p class="timeline-text">• Engineered a reinforcement learning and neural network architecture (PPO, DDQN) to create an adaptive agent that optimizes trade execution strategies in real-time.</p>
+              <p class="timeline-text">• Modeling quantitative performance using statistical methods and Python (NumPy, Pandas, SciPy) to analyze trade execution efficiency and market dynamics.</p>
             </li>
 
             <li class="timeline-item">
-              <h4 class="h4 timeline-item-title">Web Developer Intern</h4>
-              <span>June 2021 — September 2021</span>
-              <p class="timeline-text">• Designed interactive web pages for museum visitors featuring sequential exhibit zones with QR codes.</p>
-              <p class="timeline-text">• Developed puzzles and games using physical interfaces.</p>
-              <p class="timeline-text">• Built interactive tools to enhance children’s learning of Kuwait and Al-Sabah exhibit history.</p>
+              <h4 class="h4 timeline-item-title">Market Research Analyst — FinTech Club</h4>
+              <span>Aug 2024 — Present · 1 yr 2 mos</span>
+              <p class="timeline-text">• Led a project under Dr. Daniel Rodriguez replicating Evans &amp; Archer (1968) via Python simulation, analyzing portfolio diversification and risk reduction.</p>
+              <p class="timeline-text">• Utilized Pandas, NumPy, and SciPy on historical stock data to model risk (std dev log returns) vs. portfolio size, quantifying diversification benefits.</p>
+              <p class="timeline-text">• Demonstrated and presented findings confirming that most unsystematic risk is mitigated with 10-20 assets, aligning with the foundational study.</p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Summer Researcher, Virginia Tech MAOP Program</h4>
+              <span>May 2025 — Jul 2025</span>
+              <p class="timeline-text">• Conducted a mixed-methods research study on pedagogical patterns in introductory Computer Science (CS1) to identify opportunities for improving student retention and engagement.</p>
+              <p class="timeline-text">• Analyzed a corpus of examples from CS1 textbooks of top-tier universities (MIT, UC Berkeley, CalTech) to understand current teaching paradigms.</p>
+              <p class="timeline-text">• Developed a quantitative framework with eight distinct categories through an open coding process to classify the thematic focus of programming examples.</p>
+              <p class="timeline-text">• Utilized computational text analysis software (LIWC-22) and large language models to quantitatively assess the linguistic and contextual nature of course materials.</p>
+              <p class="timeline-text">• Synthesized findings to reveal a high prevalence (57%) of abstract mathematical examples, providing data-driven recommendations for incorporating more culturally relevant and real-world applications in curricula.</p>
+              <p class="timeline-text">• Co-authored and designed a formal research poster, effectively communicating the project’s methodology, results, and implications to an academic audience.</p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Research Mentor — REACH Lab</h4>
+              <span>Jan 2025 — Jun 2025 · 6 mos</span>
+              <p class="timeline-text">• Guided undergraduate researchers within the Reimagining Equity and Accessibility in Computing for Humanity (REACH) Lab at Virginia Tech.</p>
+              <p class="timeline-text">• Mentored peers on literature review best practices, database search strategies, and synthesizing findings for equitable computing research.</p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Undergraduate Research Assistant — REACH Lab</h4>
+              <span>Mar 2024 — Jun 2025 · 1 yr 4 mos</span>
+              <p class="timeline-text"><em>Blacksburg, Virginia, United States · Hybrid</em></p>
+              <p class="timeline-text">• Conducted an extensive literature review under the leadership of Dr. Ihudiya Finda Williams on Rural Computer Science Education.</p>
+              <p class="timeline-text">• Synthesized over 80 articles to support a $500,000 National Science Foundation grant proposal.</p>
+              <p class="timeline-text">• Trained six research assistants on database search methodologies, prompt design for scholarly queries, and rigorous literature review techniques.</p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">IMC Trading Competition — Top 15 US (0.005%)</h4>
+              <span>Apr 2025</span>
+              <p class="timeline-text">• Placed 15th in the US out of 12,600 teams in IMC’s Prosperity 3 trading competition, designing strategies for multi-asset markets.</p>
+              <p class="timeline-text">• Optimized trade execution under latency constraints by engineering fair value estimators (VWAP, EMA, stochastic modeling) and implementing dynamic bid shading.</p>
+              <p class="timeline-text">• Designed signal-driven market-making strategies by analyzing mean-reversion patterns and synthetic mispricing via exploratory data analysis (rolling z-scores, spread compression, correlation clustering).</p>
             </li>
           </ol>
         </section>
@@ -264,28 +376,57 @@
         </header>
 
         <section class="financial-dashboard">
-          <h3 class="h3">Live Market Analytics</h3>
+          <h3 class="h3">Roulette Simulator</h3>
 
           <div class="financial-graph">
-            <canvas id="marketChart"></canvas>
+            <div class="roulette-wrapper">
+              <div class="roulette-wheel-container">
+                <div class="roulette-pointer" aria-hidden="true"></div>
+                <div class="roulette-wheel" id="roulette-wheel"></div>
+              </div>
+              <div class="roulette-controls">
+                <h4 class="roulette-title">Roulette Spin Simulator</h4>
+                <p class="roulette-description">Spin the wheel to generate a random draw. Perfect for testing probability intuition during research breaks.</p>
+                <button type="button" class="spin-button" id="spin-button">Spin</button>
+                <div class="roulette-result" id="roulette-result" aria-live="polite">Spin to play</div>
+              </div>
+            </div>
           </div>
 
           <div class="financial-data">
-            <div class="data-row">
+            <div class="data-row" data-symbol="^GSPC">
               <span class="data-label">S&amp;P 500</span>
-              <span class="data-value" id="sp500-value">5,203.58 <span style="color: #0acf97;">+0.74%</span></span>
+              <span class="data-value">
+                <span id="sp500-value" class="data-primary">Loading…</span>
+                <span id="sp500-change" class="market-change" aria-live="polite">--</span>
+              </span>
             </div>
-            <div class="data-row">
+            <div class="data-row" data-symbol="^IXIC">
               <span class="data-label">NASDAQ</span>
-              <span class="data-value" id="nasdaq-value">16,428.82 <span style="color: #0acf97;">+1.25%</span></span>
+              <span class="data-value">
+                <span id="nasdaq-value" class="data-primary">Loading…</span>
+                <span id="nasdaq-change" class="market-change" aria-live="polite">--</span>
+              </span>
             </div>
-            <div class="data-row">
+            <div class="data-row" data-symbol="^VIX">
               <span class="data-label">VIX</span>
-              <span class="data-value" id="vix-value">16.72 <span style="color: #fa5c7c;">-4.67%</span></span>
+              <span class="data-value">
+                <span id="vix-value" class="data-primary">Loading…</span>
+                <span id="vix-change" class="market-change" aria-live="polite">--</span>
+              </span>
             </div>
-            <div class="data-row">
+            <div class="data-row" data-symbol="^TNX">
               <span class="data-label">10Y Treasury</span>
-              <span class="data-value" id="treasury-value">4.32% <span style="color: #fa5c7c;">-0.02</span></span>
+              <span class="data-value">
+                <span id="treasury-value" class="data-primary">Loading…</span>
+                <span id="treasury-change" class="market-change" aria-live="polite">--</span>
+              </span>
+            </div>
+            <div class="market-panel-footer">
+              <span id="market-last-updated" class="market-last-updated" aria-live="polite">Fetching latest data…</span>
+              <button type="button" id="market-refresh-btn" class="market-refresh-btn" title="Refresh market data" aria-label="Refresh market data">
+                <ion-icon name="refresh"></ion-icon>
+              </button>
             </div>
           </div>
         </section>
