@@ -457,19 +457,81 @@ for (let i = 0; i < filterBtn.length; i++) {
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
+const contactStatus = document.getElementById('contact-status');
+const MAILTO_ADDRESS = 'varunsb@vt.edu';
 
-// add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
+function setContactStatus(message, type) {
+  if (!contactStatus) {
+    return;
+  }
 
-    // check form validation
+  contactStatus.textContent = message || '';
+  contactStatus.classList.remove('is-error', 'is-success', 'is-pending');
+
+  if (type === 'error') {
+    contactStatus.classList.add('is-error');
+  } else if (type === 'success') {
+    contactStatus.classList.add('is-success');
+  } else if (type === 'pending') {
+    contactStatus.classList.add('is-pending');
+  }
+}
+
+if (form && formBtn) {
+  const updateFormButtonState = () => {
     if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
+      formBtn.removeAttribute('disabled');
     } else {
-      formBtn.setAttribute("disabled", "");
+      formBtn.setAttribute('disabled', '');
+    }
+  };
+
+  formInputs.forEach(input => {
+    input.addEventListener('input', updateFormButtonState);
+  });
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
     }
 
+    const formData = new FormData(form);
+    const fullname = (formData.get('fullname') || '').trim();
+    const email = (formData.get('email') || '').trim();
+    const message = (formData.get('message') || '').trim();
+
+    const subjectBase = fullname ? `Portfolio contact from ${fullname}` : 'Portfolio contact';
+    const bodyLines = [];
+    if (fullname) {
+      bodyLines.push(`Name: ${fullname}`);
+    }
+    if (email) {
+      bodyLines.push(`Email: ${email}`);
+    }
+    if (bodyLines.length) {
+      bodyLines.push('');
+    }
+    if (message) {
+      bodyLines.push(message);
+    }
+
+    const subject = encodeURIComponent(subjectBase);
+    const body = encodeURIComponent(bodyLines.join('\n'));
+    const mailtoLink = `mailto:${MAILTO_ADDRESS}?subject=${subject}&body=${body}`;
+
+    setContactStatus('Opening your email client…', 'pending');
+
+    window.location.href = mailtoLink;
+
+    window.setTimeout(() => {
+      setContactStatus('If nothing opened, email me at varunsb@vt.edu.', 'success');
+    }, 1500);
   });
+
+  updateFormButtonState();
 }
 
 // page navigation variables

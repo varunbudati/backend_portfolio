@@ -649,7 +649,8 @@
         <section class="contact-form">
           <h3 class="h3 form-title">Contact Me</h3>
 
-          <form action="#" class="form" data-form>
+          <form class="form" data-form data-mailto-form novalidate>
+            <div class="form-status" id="contact-status" role="status" aria-live="polite"></div>
             <div class="input-wrapper">
               <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
               <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
