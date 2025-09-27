@@ -5,16 +5,16 @@ const tickerContainer = document.getElementById('ticker-container');
 
 // Sample market data to use if API fails (as fallback)
 const initialMarketData = [
-  { symbol: 'BTC-USD', name: 'Bitcoin', price: 68421.24, change: '+2.5%', isPositive: true },
-  { symbol: 'ETH-USD', name: 'Ethereum', price: 3421.70, change: '-1.2%', isPositive: false },
-  { symbol: 'AAPL', name: 'Apple', price: 182.52, change: '+0.8%', isPositive: true },
-  { symbol: 'MSFT', name: 'Microsoft', price: 428.80, change: '+1.3%', isPositive: true },
-  { symbol: 'GOOGL', name: 'Google', price: 175.38, change: '-0.5%', isPositive: false },
-  { symbol: 'AMZN', name: 'Amazon', price: 182.81, change: '+1.7%', isPositive: true },
-  { symbol: 'TSLA', name: 'Tesla', price: 175.21, change: '-2.1%', isPositive: false },
-  { symbol: 'NVDA', name: 'NVIDIA', price: 108.12, change: '+3.2%', isPositive: true },
-  { symbol: 'JPM', name: 'JPMorgan', price: 198.75, change: '+0.4%', isPositive: true },
-  { symbol: 'V', name: 'Visa', price: 276.42, change: '+0.2%', isPositive: true }
+  { symbol: 'BTC-USD', name: 'Bitcoin', price: 109428.24, change: '-0.26%', isPositive: false },
+  { symbol: 'ETH-USD', name: 'Ethereum', price: 4016.23, change: '-0.49%', isPositive: false },
+  { symbol: 'AAPL', name: 'Apple', price: 255.46, change: '-0.55%', isPositive: false },
+  { symbol: 'MSFT', name: 'Microsoft', price: 511.46, change: '+0.87%', isPositive: true },
+  { symbol: 'GOOGL', name: 'Google', price: 246.54, change: '+0.31%', isPositive: true },
+  { symbol: 'AMZN', name: 'Amazon', price: 219.78, change: '+0.75%', isPositive: true },
+  { symbol: 'TSLA', name: 'Tesla', price: 440.4, change: '+4.02%', isPositive: true },
+  { symbol: 'NVDA', name: 'NVIDIA', price: 178.19, change: '+0.28%', isPositive: true },
+  { symbol: 'JPM', name: 'JPMorgan', price: 316.06, change: '+0.83%', isPositive: true },
+  { symbol: 'V', name: 'Visa', price: 337.37, change: '+0.73%', isPositive: true }
 ];
 
 const marketCard = document.querySelector('.financial-data');
@@ -495,8 +495,87 @@ for (let i = 0; i < navigationLinks.length; i++) {
 }
 
 // Initialize roulette when projects page is active
+function initAboutTypewriter() {
+  const typewriterContainer = document.querySelector('[data-typewriter]');
+  if (!typewriterContainer) {
+    return;
+  }
+
+  const output = typewriterContainer.querySelector('.typewriter-output');
+  const source = typewriterContainer.querySelector('[data-typewriter-source]');
+  if (!output || !source) {
+    return;
+  }
+
+  const segments = Array.from(source.querySelectorAll('p'));
+  const normalizedSegments = segments
+    .map(segment => segment.textContent.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+  if (!normalizedSegments.length) {
+    return;
+  }
+
+  const fullText = normalizedSegments.join('\n\n');
+  let charIndex = 0;
+
+  const baseDelay = Number(typewriterContainer.dataset.typewriterSpeed) || 28;
+  const commaPause = Number(typewriterContainer.dataset.typewriterCommaPause) || 120;
+  const sentencePause = Number(typewriterContainer.dataset.typewriterSentencePause) || 320;
+  const initialDelay = Number(typewriterContainer.dataset.typewriterInitialDelay) || 400;
+  const minimumDelay = 16;
+
+  output.textContent = '';
+  typewriterContainer.classList.add('typewriter-active');
+  let hasStarted = false;
+
+  function scheduleNext(delay) {
+    window.setTimeout(typeNextChar, Math.max(delay, minimumDelay));
+  }
+
+  function typeNextChar() {
+    if (charIndex >= fullText.length) {
+      output.textContent = fullText;
+      typewriterContainer.classList.add('typewriter-complete');
+      return;
+    }
+
+    if (!hasStarted) {
+      hasStarted = true;
+      typewriterContainer.classList.add('typewriter-running');
+      source.setAttribute('aria-hidden', 'true');
+      source.hidden = true;
+    }
+
+    const nextIndex = charIndex + 1;
+    output.textContent = fullText.slice(0, nextIndex);
+    charIndex = nextIndex;
+
+    if (charIndex >= fullText.length) {
+      typewriterContainer.classList.add('typewriter-complete');
+      return;
+    }
+
+    const currentChar = fullText.charAt(charIndex - 1);
+    let delay = baseDelay;
+
+    if ('.!?'.includes(currentChar)) {
+      delay += sentencePause;
+    } else if (',;:'.includes(currentChar)) {
+      delay += commaPause;
+    } else if (currentChar === '\n') {
+      delay += commaPause;
+    }
+
+    scheduleNext(delay);
+  }
+
+  scheduleNext(initialDelay);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   initializeRoulette();
+  initAboutTypewriter();
 
   const navigationLinks = document.querySelectorAll('[data-nav-link]');
   navigationLinks.forEach(link => {

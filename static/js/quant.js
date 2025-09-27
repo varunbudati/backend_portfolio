@@ -125,130 +125,176 @@
     setInterval(updateChart, 2000);
   }
 
-  // Interests gallery lightbox with swipe
-  (function setupGalleryLightbox(){
-    const gallery = document.querySelector('.interest-gallery');
-    const lightbox = document.getElementById('interest-lightbox');
-    if (!gallery || !lightbox) return;
-    const imgEl = lightbox.querySelector('#glb-img');
-    const captionEl = lightbox.querySelector('#glb-caption');
-    const btnClose = lightbox.querySelector('.glb-close');
-    const btnPrev = lightbox.querySelector('.glb-prev');
-    const btnNext = lightbox.querySelector('.glb-next');
-    const items = Array.from(gallery.querySelectorAll('.gallery-item'));
-    let index = 0;
+  // Gallery lightboxes with swipe support
+  (function setupGalleryLightboxes(){
+    const galleries = document.querySelectorAll('[data-gallery]');
+    galleries.forEach(gallery => {
+      const galleryKey = gallery.getAttribute('data-gallery');
+      if (!galleryKey) return;
 
-    function show(i){
-      index = (i + items.length) % items.length;
-      const fig = items[index];
-      const img = fig.querySelector('img');
-      const caption = fig.querySelector('figcaption');
-      imgEl.src = img.src;
-      imgEl.alt = img.alt || 'Gallery image';
-      if (captionEl) captionEl.textContent = caption ? caption.textContent : '';
-    }
+      const lightbox = document.querySelector(`[data-gallery-lightbox="${galleryKey}"]`);
+      if (!lightbox) return;
 
-    function open(i){
-      show(i);
-      lightbox.classList.add('active');
-      lightbox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
+      const imgEl = lightbox.querySelector('[data-lightbox-img]');
+      const captionEl = lightbox.querySelector('[data-lightbox-caption]');
+      const btnClose = lightbox.querySelector('.glb-close');
+      const btnPrev = lightbox.querySelector('.glb-prev');
+      const btnNext = lightbox.querySelector('.glb-next');
+      const items = Array.from(gallery.querySelectorAll('.gallery-item'));
+      if (!items.length || !imgEl || !captionEl) return;
 
-    function close(){
-      lightbox.classList.remove('active');
-      lightbox.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
+      let index = items.findIndex(item => item.classList.contains('active'));
+      if (index < 0) index = 0;
 
-    items.forEach((fig, i)=>{
-      fig.addEventListener('click', ()=> open(i));
-      fig.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') { e.preventDefault(); open(i);} });
-      fig.setAttribute('tabindex','0');
-      fig.setAttribute('role','button');
-      fig.setAttribute('aria-label','Open image');
+      const show = (i) => {
+        index = (i + items.length) % items.length;
+        const fig = items[index];
+        const img = fig.querySelector('img');
+        const caption = fig.querySelector('figcaption');
+        if (img) {
+          imgEl.src = img.currentSrc || img.src;
+          imgEl.alt = img.alt || 'Gallery image';
+        }
+        captionEl.textContent = caption ? caption.textContent : '';
+      };
+
+      const open = (i) => {
+        show(i);
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      };
+
+      const close = () => {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+
+      items.forEach((fig, i) => {
+        fig.addEventListener('click', () => open(i));
+        fig.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            open(i);
+          }
+        });
+        fig.setAttribute('tabindex', '0');
+        fig.setAttribute('role', 'button');
+        fig.setAttribute('aria-label', 'Open image');
+      });
+
+      btnClose && btnClose.addEventListener('click', close);
+      btnPrev && btnPrev.addEventListener('click', () => show(index - 1));
+      btnNext && btnNext.addEventListener('click', () => show(index + 1));
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
+
+      const handleKeydown = (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') show(index - 1);
+        else if (e.key === 'ArrowRight') show(index + 1);
+      };
+      window.addEventListener('keydown', handleKeydown);
+
+      let startX = 0;
+      let startY = 0;
+      let swiping = false;
+      const onTouchStart = (ev) => {
+        if (!lightbox.classList.contains('active')) return;
+        const t = ev.touches ? ev.touches[0] : ev;
+        startX = t.clientX;
+        startY = t.clientY;
+        swiping = true;
+      };
+      const onTouchEnd = (ev) => {
+        if (!swiping) return;
+        swiping = false;
+        const t = ev.changedTouches ? ev.changedTouches[0] : ev;
+        const dx = t.clientX - startX;
+        const dy = t.clientY - startY;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) show(index + 1);
+          else show(index - 1);
+        }
+      };
+      lightbox.addEventListener('touchstart', onTouchStart, { passive: true });
+      lightbox.addEventListener('touchmove', () => {}, { passive: true });
+      lightbox.addEventListener('touchend', onTouchEnd);
     });
-
-    btnClose && btnClose.addEventListener('click', close);
-    btnPrev && btnPrev.addEventListener('click', ()=> show(index-1));
-    btnNext && btnNext.addEventListener('click', ()=> show(index+1));
-    lightbox.addEventListener('click', (e)=>{ if (e.target === lightbox) close(); });
-
-    // Keyboard navigation
-    window.addEventListener('keydown', (e)=>{
-      if (!lightbox.classList.contains('active')) return;
-      if (e.key === 'Escape') close();
-      else if (e.key === 'ArrowLeft') show(index-1);
-      else if (e.key === 'ArrowRight') show(index+1);
-    });
-
-    // Touch swipe (basic)
-    let startX = 0; let startY = 0; let swiping = false;
-    function onTouchStart(ev){
-      if (!lightbox.classList.contains('active')) return;
-      const t = ev.touches ? ev.touches[0] : ev;
-      startX = t.clientX; startY = t.clientY; swiping = true;
-    }
-    function onTouchMove(ev){ if (!swiping) return; }
-    function onTouchEnd(ev){
-      if (!swiping) return; swiping = false;
-      const t = ev.changedTouches ? ev.changedTouches[0] : ev;
-      const dx = t.clientX - startX; const dy = t.clientY - startY;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) show(index+1); else show(index-1);
-      }
-    }
-    lightbox.addEventListener('touchstart', onTouchStart, {passive:true});
-    lightbox.addEventListener('touchmove', onTouchMove, {passive:true});
-    lightbox.addEventListener('touchend', onTouchEnd);
   })();
 
-  // Interests single-image slider: autoplay + click/swipe next
-  (function setupInterestSlider(){
-    const slider = document.getElementById('interest-slider');
-    if (!slider) return;
-    const slides = Array.from(slider.querySelectorAll('.slide'));
-    let idx = slides.findIndex(s => s.classList.contains('active'));
-    if (idx < 0) idx = 0;
-    let timer;
+  // Autoplay sliders for any gallery carousel
+  (function setupGallerySliders(){
+    const sliders = document.querySelectorAll('[data-gallery-slider]');
+    sliders.forEach(slider => {
+      const slides = Array.from(slider.querySelectorAll('.slide'));
+      if (!slides.length) return;
 
-    function show(i){
-      slides[idx].classList.remove('active');
-      idx = (i + slides.length) % slides.length;
-      slides[idx].classList.add('active');
-    }
-
-    function next(){ show(idx + 1); }
-
-    function start(){ stop(); timer = setInterval(next, 3500); }
-    function stop(){ if (timer) clearInterval(timer); }
-
-    // Autoplay
-    start();
-
-    // Click to next
-    slider.addEventListener('click', () => { next(); start(); });
-
-    // Swipe
-    let sx = 0, sy = 0, swiping = false;
-    slider.addEventListener('touchstart', (e) => {
-      const t = e.touches[0]; sx = t.clientX; sy = t.clientY; swiping = true; stop();
-    }, {passive:true});
-    slider.addEventListener('touchmove', (e) => {}, {passive:true});
-    slider.addEventListener('touchend', (e) => {
-      if (!swiping) return; swiping = false;
-      const t = e.changedTouches[0]; const dx = t.clientX - sx; const dy = t.clientY - sy;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) next(); else show(idx - 1);
-      } else {
-        // treat as tap
-        next();
+      let idx = slides.findIndex(s => s.classList.contains('active'));
+      if (idx < 0) {
+        idx = 0;
+        slides[0].classList.add('active');
       }
-      start();
-    });
 
-    // Pause on hover (desktop)
-    slider.addEventListener('mouseenter', stop);
-    slider.addEventListener('mouseleave', start);
+      const interval = parseInt(slider.getAttribute('data-gallery-interval'), 10) || 3500;
+      let timer;
+
+      const show = (i) => {
+        slides[idx].classList.remove('active');
+        idx = (i + slides.length) % slides.length;
+        slides[idx].classList.add('active');
+      };
+
+      const next = () => show(idx + 1);
+      const prev = () => show(idx - 1);
+
+      const start = () => {
+        stop();
+        timer = window.setInterval(next, interval);
+      };
+      const stop = () => {
+        if (timer) {
+          window.clearInterval(timer);
+          timer = undefined;
+        }
+      };
+
+      start();
+
+      slider.addEventListener('click', () => {
+        next();
+        start();
+      });
+
+      let sx = 0;
+      let sy = 0;
+      let swiping = false;
+      slider.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        sx = t.clientX;
+        sy = t.clientY;
+        swiping = true;
+        stop();
+      }, { passive: true });
+      slider.addEventListener('touchmove', () => {}, { passive: true });
+      slider.addEventListener('touchend', (e) => {
+        if (!swiping) return;
+        swiping = false;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx;
+        const dy = t.clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) next();
+          else prev();
+        } else {
+          next();
+        }
+        start();
+      });
+
+      slider.addEventListener('mouseenter', stop);
+      slider.addEventListener('mouseleave', start);
+    });
   })();
 })();

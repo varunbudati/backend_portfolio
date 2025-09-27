@@ -131,15 +131,79 @@
           <h2 class="h2 article-title">About me</h2>
         </header>
 
-        <section class="about-text">
-          <p>I have a genuine passion for quantitative research and enjoy every stage of algorithm development. I'm particularly interested in designing and implementing trading strategies from scratch, from benchmark algorithms like VWAP and TWAP to adaptive agents using reinforcement learning. The discovery aspect of research, such as analyzing trade data to find a statistical edge or modeling performance to understand market dynamics, is what I find most engaging.</p>
-          <p>Driven by a passion for the financial markets, I am currently pursuing the CFA Level 1 designation to deepen my knowledge of financial analysis and asset valuation.</p>
+        <section class="about-text" data-typewriter data-typewriter-speed="28" data-typewriter-comma-pause="130" data-typewriter-sentence-pause="340" data-typewriter-initial-delay="450">
+          <div id="about-typewriter-output" class="typewriter-output" aria-live="polite" aria-atomic="true"></div>
+
+          <div class="typewriter-source" data-typewriter-source>
+            <p>I've always enjoyed finding the overlap between different fields, and for me, that's been combining my computer science and math background with finance. What I really like is taking an idea, whether it's from a class or a paper, and actually building it out to see how it works in the real world.</p>
+            <p>My research role at the Dataism Lab has been a great place to do that. I spend my time digging into crypto trade data to understand its structure and then use what I find to build and test different trading algorithms. It's been cool to start with the fundamentals, like coding VWAP and TWAP from scratch, but I've also had the chance to dive into more complex topics like using reinforcement learning to make an agent that can adapt to the market on its own.</p>
+            <p>On the side, I like to build my own projects just to try things out. I put together a sports prediction model, mostly as a fun way to get better at finding small statistical edges and to teach myself about risk management, like using the Kelly Criterion. I also find that competitions are a great way to learn—the IMC Prosperity challenge was basically a crash course in market-making under pressure.</p>
+            <p>I know the technical skills are just one piece of the puzzle, though. That's why I'm studying for the CFA Level 1 exam and am active in our FinTech club; I want to make sure I have a solid grasp of the finance side of things, not just the code.</p>
+          </div>
+        </section>
+
+        <section class="service">
+          <h3 class="h3 service-title">Events</h3>
+
+          <div class="about-text">
+          </div>
+
+          <div class="interest-slider events-gallery" id="events-slider" data-gallery="events" data-gallery-slider aria-label="Events slideshow" role="region">
+            <figure class="slide gallery-item active">
+              <img src="{{ url_for('static', filename='images/events/1743677374010.jpg') }}" alt="Event highlight photograph" loading="lazy" />
+              <figcaption>DLQF Lab</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/DSC_0593-845x684.jpeg') }}" alt="Crowd scene from an event" loading="lazy" />
+              <figcaption>REACH Lab</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/DSC_0667.jpeg') }}" alt="Event photo with colleagues" loading="lazy" />
+              <figcaption>Symposium Summer 2026 w/MAOP</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/DSC_0799.jpeg') }}" alt="Speaker on stage during an event" loading="lazy" />
+              <figcaption>MAOP Group 2026</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/DSC_0901.jpeg') }}" alt="Networking area at an event" loading="lazy" />
+              <figcaption>MAOP & REACH Lab </figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/IMG_3724.JPG') }}" alt="Group celebrating at an event" loading="lazy" />
+              <figcaption>GobblerFest w/FinTech Club Fall 2025</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/IMG_7613.jpg') }}" alt="Outdoor event moment" loading="lazy" />
+              <figcaption>NYC Trip</figcaption>
+            </figure>
+            <figure class="slide gallery-item">
+              <img src="{{ url_for('static', filename='images/events/Media-1500x430.jpeg') }}" alt="Event banner and branding" loading="lazy" />
+              <figcaption>REACH Lab</figcaption>
+            </figure>
+          </div>
+
+          <div class="gallery-lightbox" data-gallery-lightbox="events" aria-hidden="true" role="dialog" aria-label="Events gallery viewer">
+            <div class="glb-content">
+              <button class="glb-btn glb-close" type="button" aria-label="Close">
+                <ion-icon name="close"></ion-icon>
+              </button>
+              <button class="glb-btn glb-prev" type="button" aria-label="Previous image">
+                <ion-icon name="chevron-back"></ion-icon>
+              </button>
+              <img class="glb-image" data-lightbox-img alt="Gallery image" />
+              <button class="glb-btn glb-next" type="button" aria-label="Next image">
+                <ion-icon name="chevron-forward"></ion-icon>
+              </button>
+            </div>
+            <div class="glb-caption" data-lightbox-caption></div>
+          </div>
         </section>
 
         <section class="service">
           <h3 class="h3 service-title">My Kittens!</h3>
 
-          <div class="interest-slider interest-gallery" id="interest-slider" aria-label="Interests slideshow" role="region">
+          <div class="interest-slider interest-gallery" id="interest-slider" data-gallery="kittens" data-gallery-slider aria-label="Interests slideshow" role="region">
             <figure class="slide gallery-item active">
               <img src="{{ url_for('static', filename='images/cat-images/web/IMG_5870.jpg') }}" alt="Kitten lounging on a blanket" loading="lazy" />
               <figcaption>Cozy Lounger</figcaption>
@@ -243,7 +307,7 @@
           </div>
         </section>
 
-        <div class="gallery-lightbox" id="interest-lightbox" aria-hidden="true" role="dialog" aria-label="Interests gallery viewer">
+        <div class="gallery-lightbox" id="interest-lightbox" data-gallery-lightbox="kittens" aria-hidden="true" role="dialog" aria-label="Interests gallery viewer">
           <div class="glb-content">
             <button class="glb-btn glb-close" type="button" aria-label="Close">
               <ion-icon name="close"></ion-icon>
@@ -251,12 +315,12 @@
             <button class="glb-btn glb-prev" type="button" aria-label="Previous image">
               <ion-icon name="chevron-back"></ion-icon>
             </button>
-            <img id="glb-img" class="glb-image" alt="Gallery image" />
+            <img class="glb-image" data-lightbox-img alt="Gallery image" />
             <button class="glb-btn glb-next" type="button" aria-label="Next image">
               <ion-icon name="chevron-forward"></ion-icon>
             </button>
           </div>
-          <div id="glb-caption" class="glb-caption"></div>
+          <div class="glb-caption" data-lightbox-caption></div>
         </div>
       </article>
 

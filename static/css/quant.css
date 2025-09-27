@@ -796,6 +796,41 @@ body.theme-light .content-card::before {
 	right: -56px;
 }
 
+/* =========================
+	 EVENTS GALLERY HELPERS
+	 ========================= */
+
+.events .about-text p {
+	color: var(--light-gray-70);
+}
+
+body.theme-light .events .about-text p {
+	color: var(--light-gray);
+}
+
+.events .event-notes {
+	margin-top: 20px;
+	padding-left: 1.4rem;
+	line-height: 1.6;
+	color: var(--light-gray-70);
+}
+
+body.theme-light .events .event-notes {
+	color: var(--light-gray);
+}
+
+.events .event-notes li {
+	margin-bottom: 0.5rem;
+}
+
+.events .event-notes code {
+	font-family: "Roboto Mono", monospace;
+	font-size: 0.85rem;
+	background: rgba(148, 163, 184, 0.15);
+	padding: 2px 6px;
+	border-radius: 6px;
+}
+
 @media (max-width: 640px) {
 	.glb-prev {
 		left: 8px;
