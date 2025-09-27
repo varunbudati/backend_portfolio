@@ -1,6 +1,6 @@
-# Personal Website (Render Edition)
+# My Personal Website (Render Edition)
 
-A full-stack Flask application that powers Varun Budati's quantitative engineering portfolio. The app serves the production-ready UI from the previous static site and augments it with live market telemetry backed by `yfinance`.
+The app serves the production-ready UI from the previous static site and augments it with live market telemetry backed by `yfinance`.
 
 ## Features
 
