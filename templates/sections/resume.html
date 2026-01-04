@@ -4,7 +4,23 @@
     <header>
       <h2 class="h2 article-title">Resume</h2>
     </header>
-    <a href="{{ url_for('static', filename='images/Varun_Budati_Resume.pdf') }}" class="download-button" download>Resume</a>
+    <button id="view-resume-btn" class="download-button" type="button">View Resume</button>
+  </div>
+
+  <!-- Resume Modal -->
+  <div id="resume-modal" class="resume-modal">
+    <div class="resume-modal-content">
+      <div class="resume-modal-header">
+        <h3>Resume Preview</h3>
+        <button id="close-resume-modal" class="resume-modal-close" type="button">&times;</button>
+      </div>
+      <div class="resume-modal-body">
+        <iframe id="resume-iframe" src="{{ url_for('static', filename='images/Varun_Budati_Resume.pdf') }}" type="application/pdf"></iframe>
+      </div>
+      <div class="resume-modal-footer">
+        <a href="{{ url_for('static', filename='images/Varun_Budati_Resume.pdf') }}" class="download-link" download>Download PDF</a>
+      </div>
+    </div>
   </div>
 
   {% include 'sections/education.html' %}
