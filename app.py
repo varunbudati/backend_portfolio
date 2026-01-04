@@ -1,14 +1,20 @@
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Iterable, Tuple
+import os
 
 import numpy as np
-import yfinance as yf
+import requests
 from flask import Flask, jsonify, render_template
 
 
 app = Flask(__name__)
 
+# API Configuration
+FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")
+COINGECKO_API = "https://api.coingecko.com/api/v3"
+FINNHUB_API = "https://finnhub.io/api/v1"
 
+# Cache configuration
 _PRICE_CACHE: Dict[str, Tuple[datetime, Tuple[float | None, float | None]]] = {}
 _CACHE_TTL = timedelta(seconds=30)  # Reduced from 2 minutes for real-time updates
 
@@ -97,6 +103,74 @@ TICKER_NAMES = {
     "JPM": "JPMorgan",
     "V": "Visa",
 }
+
+
+# Crypto mapping for CoinGecko API
+CRYPTO_TO_COINGECKO = {
+    "BTC-USD": "bitcoin",
+    "ETH-USD": "ethereum",
+}
+
+
+def _fetch_crypto_data(symbol: str) -> Tuple[float | None, float | None]:
+    """Fetch crypto price from CoinGecko (free, no API key needed)."""
+    try:
+        crypto_id = CRYPTO_TO_COINGECKO.get(symbol)
+        if not crypto_id:
+            return None, None
+
+        response = requests.get(
+            f"{COINGECKO_API}/simple/price",
+            params={
+                "ids": crypto_id,
+                "vs_currencies": "usd",
+                "include_market_cap": "false",
+                "include_24hr_change": "true",
+            },
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        if crypto_id in data and "usd" in data[crypto_id]:
+            latest_price = float(data[crypto_id]["usd"])
+            change_24h = data[crypto_id].get("usd_24h_change", 0)
+            if change_24h is not None:
+                previous_price = latest_price / (1 + (change_24h / 100))
+            else:
+                previous_price = latest_price
+            return latest_price, previous_price
+
+    except Exception as exc:
+        app.logger.warning("CoinGecko fetch failed for %s: %s", symbol, exc)
+
+    return None, None
+
+
+def _fetch_stock_data(symbol: str) -> Tuple[float | None, float | None]:
+    """Fetch stock quote from Finnhub (free tier available)."""
+    if not FINNHUB_API_KEY:
+        app.logger.warning("FINNHUB_API_KEY not set, using fallback for %s", symbol)
+        return None, None
+
+    try:
+        response = requests.get(
+            f"{FINNHUB_API}/quote",
+            params={"symbol": symbol, "token": FINNHUB_API_KEY},
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        if "c" in data and data["c"] > 0:  # c = current price
+            latest_price = float(data["c"])
+            previous_price = float(data["pc"]) if data.get("pc", 0) > 0 else latest_price
+            return latest_price, previous_price
+
+    except Exception as exc:
+        app.logger.warning("Finnhub fetch failed for %s: %s", symbol, exc)
+
+    return None, None
 
 
 @app.route("/")
@@ -267,14 +341,10 @@ def _generate_historical_fallback() -> dict:
 
 
 def _fetch_recent_closes(symbols: Iterable[str], *, period_days: int) -> Dict[str, Tuple[float | None, float | None]]:
-    """Fetch the most recent and previous close for each symbol using yfinance.
-
-    Returns a mapping of symbol -> (latest_close, previous_close). If insufficient
-    data is available, the tuple values will be ``(None, None)``.
+    """Fetch the most recent and previous close for each symbol.
+    Uses CoinGecko for crypto and Finnhub for stocks.
     """
-
     results: Dict[str, Tuple[float | None, float | None]] = {}
-    period = max(period_days, 2)
     now = datetime.now(timezone.utc)
 
     for symbol in symbols:
@@ -283,7 +353,12 @@ def _fetch_recent_closes(symbols: Iterable[str], *, period_days: int) -> Dict[st
             results[symbol] = cached[1]
             continue
 
-        latest_close, previous_close = _fetch_symbol_closes(symbol, period)
+        # Fetch from appropriate API
+        if symbol in CRYPTO_TO_COINGECKO:
+            latest_close, previous_close = _fetch_crypto_data(symbol)
+        else:
+            latest_close, previous_close = _fetch_stock_data(symbol)
+
         results[symbol] = (latest_close, previous_close)
 
         if latest_close is not None and previous_close is not None:
@@ -292,45 +367,6 @@ def _fetch_recent_closes(symbols: Iterable[str], *, period_days: int) -> Dict[st
     return results
 
 
-def _fetch_symbol_closes(symbol: str, period: int) -> Tuple[float | None, float | None]:
-    try:
-        history = yf.Ticker(symbol).history(
-            period=f"{period}d",
-            interval="1d",
-            auto_adjust=False,
-            actions=False,
-        )
-
-        closes = history.get("Close")
-        if closes is not None and not closes.dropna().empty:
-            closes = closes.dropna()
-            latest_close = float(closes.iloc[-1])
-            previous_close = float(closes.iloc[-2]) if len(closes) >= 2 else latest_close
-            return latest_close, previous_close
-    except Exception as exc:
-        app.logger.debug("Ticker.history failed for %s: %s", symbol, exc)
-
-    try:
-        frame = yf.download(
-            symbol,
-            period=f"{period}d",
-            interval="1d",
-            progress=False,
-            threads=False,
-            auto_adjust=False,
-        )
-
-        if not frame.empty:
-            closes = frame["Close"] if "Close" in frame else frame.iloc[:, 3]
-            closes = closes.dropna()
-            if not closes.empty:
-                latest_close = float(closes.iloc[-1])
-                previous_close = float(closes.iloc[-2]) if len(closes) >= 2 else latest_close
-                return latest_close, previous_close
-    except Exception as exc:
-        app.logger.debug("yf.download failed for %s: %s", symbol, exc)
-
-    return None, None
 
 
 if __name__ == "__main__":  # pragma: no cover
