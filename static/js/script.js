@@ -5,16 +5,16 @@ const tickerContainer = document.getElementById('ticker-container');
 
 // Sample market data to use if API fails (as fallback)
 const initialMarketData = [
-  { symbol: 'BTC-USD', name: 'Bitcoin', price: 109428.24, change: '-0.26%', isPositive: false },
-  { symbol: 'ETH-USD', name: 'Ethereum', price: 4016.23, change: '-0.49%', isPositive: false },
-  { symbol: 'AAPL', name: 'Apple', price: 255.46, change: '-0.55%', isPositive: false },
-  { symbol: 'MSFT', name: 'Microsoft', price: 511.46, change: '+0.87%', isPositive: true },
-  { symbol: 'GOOGL', name: 'Google', price: 246.54, change: '+0.31%', isPositive: true },
-  { symbol: 'AMZN', name: 'Amazon', price: 219.78, change: '+0.75%', isPositive: true },
-  { symbol: 'TSLA', name: 'Tesla', price: 440.4, change: '+4.02%', isPositive: true },
-  { symbol: 'NVDA', name: 'NVIDIA', price: 178.19, change: '+0.28%', isPositive: true },
-  { symbol: 'JPM', name: 'JPMorgan', price: 316.06, change: '+0.83%', isPositive: true },
-  { symbol: 'V', name: 'Visa', price: 337.37, change: '+0.73%', isPositive: true }
+  { symbol: 'BTC-USD', name: 'Bitcoin', price: 97500.00, change: '--', isPositive: false },
+  { symbol: 'ETH-USD', name: 'Ethereum', price: 3400.00, change: '--', isPositive: false },
+  { symbol: 'AAPL', name: 'Apple', price: 250.00, change: '--', isPositive: false },
+  { symbol: 'MSFT', name: 'Microsoft', price: 445.00, change: '--', isPositive: true },
+  { symbol: 'GOOGL', name: 'Google', price: 215.00, change: '--', isPositive: true },
+  { symbol: 'AMZN', name: 'Amazon', price: 210.00, change: '--', isPositive: true },
+  { symbol: 'TSLA', name: 'Tesla', price: 410.00, change: '--', isPositive: true },
+  { symbol: 'NVDA', name: 'NVIDIA', price: 145.00, change: '--', isPositive: true },
+  { symbol: 'JPM', name: 'JPMorgan', price: 220.00, change: '--', isPositive: true },
+  { symbol: 'V', name: 'Visa', price: 310.00, change: '--', isPositive: true }
 ];
 
 const marketCard = document.querySelector('.financial-data');
@@ -327,16 +327,16 @@ populateTickerWithData(initialMarketData);
 // Immediately try to fetch real data
 fetchMarketData();
 
-// Refresh ticker data every 60 seconds
+// Refresh ticker data every 15 seconds for real-time updates
 setInterval(() => {
   fetchMarketData();
-}, 60000);
+}, 15000);
 
-// Prime market indices immediately and on an interval
+// Prime market indices immediately and on a 15-second interval
 updateMarketIndices();
 setInterval(() => {
   updateMarketIndices();
-}, 60000);
+}, 15000);
 
 if (marketRefreshBtn) {
   marketRefreshBtn.addEventListener('click', () => {

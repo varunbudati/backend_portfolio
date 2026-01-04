@@ -10,43 +10,43 @@ app = Flask(__name__)
 
 
 _PRICE_CACHE: Dict[str, Tuple[datetime, Tuple[float | None, float | None]]] = {}
-_CACHE_TTL = timedelta(minutes=2)
+_CACHE_TTL = timedelta(seconds=30)  # Reduced from 2 minutes for real-time updates
 
 
 INDEX_FALLBACKS: Dict[str, dict] = {
     "^GSPC": {
         "symbol": "^GSPC",
         "name": "S&P 500",
-        "rawValue": 6643.70,
-        "rawPrevious": 6604.72,
-        "rawChange": 0.59,
+        "rawValue": 5927.00,
+        "rawPrevious": 5900.25,
+        "rawChange": 0.45,
         "changeType": "percent",
         "isPositive": True,
     },
     "^IXIC": {
         "symbol": "^IXIC",
         "name": "NASDAQ",
-        "rawValue": 22484.07,
-        "rawPrevious": 22384.70,
-        "rawChange": 0.44,
+        "rawValue": 19428.00,
+        "rawPrevious": 19350.75,
+        "rawChange": 0.40,
         "changeType": "percent",
         "isPositive": True,
     },
     "^VIX": {
         "symbol": "^VIX",
         "name": "VIX",
-        "rawValue": 15.29,
-        "rawPrevious": 16.74,
-        "rawChange": -8.66,
+        "rawValue": 13.45,
+        "rawPrevious": 14.20,
+        "rawChange": -5.28,
         "changeType": "percent",
         "isPositive": True,
     },
     "^TNX": {
         "symbol": "^TNX",
         "name": "10Y Treasury",
-    "rawValue": 4.187,
-    "rawPrevious": 4.172,
-    "rawChange": 0.02,
+        "rawValue": 4.251,
+        "rawPrevious": 4.235,
+        "rawChange": 0.016,
         "changeType": "absolute",
         "isPositive": True,
     },
@@ -71,16 +71,16 @@ def _format_index_change(symbol: str, raw_change: float | None, *, change_type: 
 
 
 FALLBACK_DATA = [
-    {"symbol": "BTC-USD", "name": "Bitcoin", "price": 109428.24, "change": "-0.26%", "isPositive": False},
-    {"symbol": "ETH-USD", "name": "Ethereum", "price": 4016.23, "change": "-0.49%", "isPositive": False},
-    {"symbol": "AAPL", "name": "Apple", "price": 255.46, "change": "-0.55%", "isPositive": False},
-    {"symbol": "MSFT", "name": "Microsoft", "price": 511.46, "change": "+0.87%", "isPositive": True},
-    {"symbol": "GOOGL", "name": "Google", "price": 246.54, "change": "+0.31%", "isPositive": True},
-    {"symbol": "AMZN", "name": "Amazon", "price": 219.78, "change": "+0.75%", "isPositive": True},
-    {"symbol": "TSLA", "name": "Tesla", "price": 440.40, "change": "+4.02%", "isPositive": True},
-    {"symbol": "NVDA", "name": "NVIDIA", "price": 178.19, "change": "+0.28%", "isPositive": True},
-    {"symbol": "JPM", "name": "JPMorgan", "price": 316.06, "change": "+0.83%", "isPositive": True},
-    {"symbol": "V", "name": "Visa", "price": 337.37, "change": "+0.73%", "isPositive": True},
+    {"symbol": "BTC-USD", "name": "Bitcoin", "price": 97500.00, "change": "--", "isPositive": False},
+    {"symbol": "ETH-USD", "name": "Ethereum", "price": 3400.00, "change": "--", "isPositive": False},
+    {"symbol": "AAPL", "name": "Apple", "price": 250.00, "change": "--", "isPositive": False},
+    {"symbol": "MSFT", "name": "Microsoft", "price": 445.00, "change": "--", "isPositive": True},
+    {"symbol": "GOOGL", "name": "Google", "price": 215.00, "change": "--", "isPositive": True},
+    {"symbol": "AMZN", "name": "Amazon", "price": 210.00, "change": "--", "isPositive": True},
+    {"symbol": "TSLA", "name": "Tesla", "price": 410.00, "change": "--", "isPositive": True},
+    {"symbol": "NVDA", "name": "NVIDIA", "price": 145.00, "change": "--", "isPositive": True},
+    {"symbol": "JPM", "name": "JPMorgan", "price": 220.00, "change": "--", "isPositive": True},
+    {"symbol": "V", "name": "Visa", "price": 310.00, "change": "--", "isPositive": True},
 ]
 
 TICKER_SYMBOLS = ["BTC-USD", "ETH-USD", "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "NVDA", "JPM", "V"]
