@@ -178,6 +178,11 @@ def home() -> str:
     return render_template("index.html")
 
 
+@app.route("/poker")
+def poker() -> str:
+    return render_template("poker.html")
+
+
 @app.route("/ticker", methods=["GET"])
 def get_ticker_data():
     price_map = _fetch_recent_closes(TICKER_SYMBOLS, period_days=5)

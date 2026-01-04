@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Game - Varun Budati</title>
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/quant.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/poker.css') }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="theme-dark">
+  <main>
+    <div class="poker-container">
+      <div class="poker-header">
+        <h1>♠️ Texas Hold'em Poker ♠️</h1>
+        <a href="/" class="back-btn">← Back to Portfolio</a>
+      </div>
+
+      <div class="poker-game">
+        <!-- Dealer Area -->
+        <div class="dealer-section">
+          <h3>Dealer</h3>
+          <div class="dealer-cards" id="dealerCards"></div>
+          <p class="dealer-hand" id="dealerHand">-</p>
+        </div>
+
+        <!-- Community Cards -->
+        <div class="community-section">
+          <h3>Community Cards</h3>
+          <div class="community-cards" id="communityCards"></div>
+        </div>
+
+        <!-- Player Area -->
+        <div class="player-section">
+          <div class="player-info">
+            <h3>Your Hand</h3>
+            <p>Chips: <span id="playerChips">1000</span></p>
+            <p>Bet: <span id="playerBet">0</span></p>
+          </div>
+          <div class="player-cards" id="playerCards"></div>
+          <p class="player-hand" id="playerHand">-</p>
+        </div>
+
+        <!-- Game Status -->
+        <div class="game-status">
+          <p id="gameMessage">Welcome to Poker! Click 'Deal' to start.</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="poker-controls">
+          <input type="number" id="betAmount" placeholder="Bet amount" min="10" max="500" value="50">
+          <button id="dealBtn" class="btn btn-primary">Deal</button>
+          <button id="foldBtn" class="btn btn-danger" disabled>Fold</button>
+          <button id="callBtn" class="btn btn-success" disabled>Call</button>
+          <button id="raiseBtn" class="btn btn-warning" disabled>Raise</button>
+          <button id="allInBtn" class="btn btn-secondary" disabled>All In</button>
+        </div>
+
+        <!-- Game Result -->
+        <div class="game-result" id="gameResult"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/poker.js') }}"></script>
+</body>
+
+</html>
