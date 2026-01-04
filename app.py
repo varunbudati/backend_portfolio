@@ -178,9 +178,9 @@ def home() -> str:
     return render_template("index.html")
 
 
-@app.route("/poker")
-def poker() -> str:
-    return render_template("poker.html")
+@app.route("/blackjack")
+def blackjack() -> str:
+    return render_template("blackjack.html")
 
 
 @app.route("/ticker", methods=["GET"])
