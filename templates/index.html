@@ -129,15 +129,19 @@
         </ul>
       </nav>
 
-      <article class="about active" data-page="about">
-        <header>
-          <h2 class="h2 article-title">About me</h2>
-        </header>
+      <!-- About Section -->
+      {% include 'sections/about.html' %}
 
-        <section class="about-text" data-typewriter data-typewriter-speed="28" data-typewriter-comma-pause="130" data-typewriter-sentence-pause="340" data-typewriter-initial-delay="450">
-          <div id="about-typewriter-output" class="typewriter-output" aria-live="polite" aria-atomic="true"></div>
+      <!-- Resume Section -->
+      {% include 'sections/resume.html' %}
 
-          <div class="typewriter-source" data-typewriter-source>
+      <!-- Projects Section -->
+      {% include 'sections/projects.html' %}
+
+      <!-- Contact Section -->
+      {% include 'sections/contact.html' %}
+    </div>
+  </main>
             <p>I've always enjoyed finding the overlap between different fields, and for me, that's been combining my computer science and math background with finance. What I really like is taking an idea, whether it's from a class or a paper, and actually building it out to see how it works in the real world.</p>
             <p>My research role at the Dataism Lab has been a great place to do that. I spend my time digging into crypto trade data to understand its structure and then use what I find to build and test different trading algorithms. It's been cool to start with the fundamentals, like coding VWAP and TWAP from scratch, but I've also had the chance to dive into more complex topics like using reinforcement learning to make an agent that can adapt to the market on its own.</p>
             <p>On the side, I like to build my own projects just to try things out. I put together a sports prediction model, mostly as a fun way to get better at finding small statistical edges and to teach myself about risk management, like using the Kelly Criterion. I also find that competitions are a great way to learn—the IMC Prosperity challenge was basically a crash course in market-making under pressure.</p>

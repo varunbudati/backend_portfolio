@@ -1,0 +1,55 @@
+<section class="financial-dashboard">
+  <h3 class="h3">Roulette Simulator</h3>
+
+  <div class="financial-graph">
+    <div class="roulette-wrapper">
+      <div class="roulette-wheel-container">
+        <div class="roulette-pointer" aria-hidden="true"></div>
+        <div class="roulette-wheel" id="roulette-wheel"></div>
+      </div>
+      <div class="roulette-controls">
+        <h4 class="roulette-title">Roulette Spin Simulator</h4>
+        <p class="roulette-description">Spin the wheel to generate a random draw. Perfect for testing probability intuition during research breaks.</p>
+        <button type="button" class="spin-button" id="spin-button">Spin</button>
+        <div class="roulette-result" id="roulette-result" aria-live="polite">Spin to play</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="financial-data">
+    <div class="data-row" data-symbol="^GSPC">
+      <span class="data-label">S&amp;P 500</span>
+      <span class="data-value">
+        <span id="sp500-value" class="data-primary">Loading…</span>
+        <span id="sp500-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^IXIC">
+      <span class="data-label">NASDAQ</span>
+      <span class="data-value">
+        <span id="nasdaq-value" class="data-primary">Loading…</span>
+        <span id="nasdaq-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^VIX">
+      <span class="data-label">VIX</span>
+      <span class="data-value">
+        <span id="vix-value" class="data-primary">Loading…</span>
+        <span id="vix-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^TNX">
+      <span class="data-label">10Y Treasury</span>
+      <span class="data-value">
+        <span id="treasury-value" class="data-primary">Loading…</span>
+        <span id="treasury-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="market-panel-footer">
+      <span id="market-last-updated" class="market-last-updated" aria-live="polite">Fetching latest data…</span>
+      <button type="button" id="market-refresh-btn" class="market-refresh-btn" title="Refresh market data" aria-label="Refresh market data">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </div>
+  </div>
+</section>

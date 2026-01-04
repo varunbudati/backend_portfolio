@@ -1,0 +1,57 @@
+<section class="service">
+  <h3 class="h3 service-title">Events</h3>
+
+  <div class="about-text">
+  </div>
+
+  <div class="interest-slider events-gallery" id="events-slider" data-gallery="events" data-gallery-slider aria-label="Events slideshow" role="region">
+    <figure class="slide gallery-item active">
+      <img src="{{ url_for('static', filename='images/events/1743677374010.jpg') }}" alt="Event highlight photograph" loading="lazy" />
+      <figcaption>DLQF Lab</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/DSC_0593-845x684.jpeg') }}" alt="Crowd scene from an event" loading="lazy" />
+      <figcaption>REACH Lab</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/DSC_0667.jpeg') }}" alt="Event photo with colleagues" loading="lazy" />
+      <figcaption>Symposium Summer 2026 w/MAOP</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/DSC_0799.jpeg') }}" alt="Speaker on stage during an event" loading="lazy" />
+      <figcaption>MAOP Group 2026</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/DSC_0901.jpeg') }}" alt="Networking area at an event" loading="lazy" />
+      <figcaption>MAOP & REACH Lab </figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/IMG_3724.JPG') }}" alt="Group celebrating at an event" loading="lazy" />
+      <figcaption>GobblerFest w/FinTech Club Fall 2025</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/IMG_7613.jpg') }}" alt="Outdoor event moment" loading="lazy" />
+      <figcaption>NYC Trip</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="{{ url_for('static', filename='images/events/Media-1500x430.jpeg') }}" alt="Event banner and branding" loading="lazy" />
+      <figcaption>REACH Lab</figcaption>
+    </figure>
+  </div>
+
+  <div class="gallery-lightbox" data-gallery-lightbox="events" aria-hidden="true" role="dialog" aria-label="Events gallery viewer">
+    <div class="glb-content">
+      <button class="glb-btn glb-close" type="button" aria-label="Close">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      <button class="glb-btn glb-prev" type="button" aria-label="Previous image">
+        <ion-icon name="chevron-back"></ion-icon>
+      </button>
+      <img class="glb-image" data-lightbox-img alt="Gallery image" />
+      <button class="glb-btn glb-next" type="button" aria-label="Next image">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+    <div class="glb-caption" data-lightbox-caption></div>
+  </div>
+</section>

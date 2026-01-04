@@ -1,0 +1,14 @@
+{% block resume %}
+<article class="resume" data-page="resume">
+  <div class="header">
+    <header>
+      <h2 class="h2 article-title">Resume</h2>
+    </header>
+    <a href="{{ url_for('static', filename='images/Varun_Budati_Resume.pdf') }}" class="download-button" download>Resume</a>
+  </div>
+
+  {% include 'sections/education.html' %}
+  {% include 'sections/experience.html' %}
+  {% include 'sections/skills.html' %}
+</article>
+{% endblock %}

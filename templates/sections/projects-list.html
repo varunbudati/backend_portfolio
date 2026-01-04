@@ -1,0 +1,138 @@
+<section class="projects">
+  <ul class="filter-list">
+    <li class="filter-item">
+      <button class="active" data-filter-btn>All</button>
+    </li>
+    <li class="filter-item">
+      <button data-filter-btn>Applications</button>
+    </li>
+  </ul>
+
+  <div class="filter-select-box">
+    <button class="filter-select" data-select>
+      <div class="select-value" data-selecct-value>Select category</div>
+      <div class="select-icon">
+        <ion-icon name="chevron-down"></ion-icon>
+      </div>
+    </button>
+
+    <ul class="select-list">
+      <li class="select-item">
+        <button data-select-item>All</button>
+      </li>
+      <li class="select-item">
+        <button data-select-item>Applications</button>
+      </li>
+    </ul>
+  </div>
+
+  <ul class="project-list">
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/sports_betting.gif') }}" alt="Sports Betting Algorithm &amp; Analytics System" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Sports Betting Algorithm &amp; Analytics System</h3>
+          <p class="project-description">A sophisticated analytics system to identify profitable betting opportunities using statistical models and machine learning.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">Streamlit</span>
+          </div>
+          <a href="https://www.linkedin.com/in/varun-budati/details/projects/" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/Almgren_Chriss_Model.gif') }}" alt="Optimal Trading Execution System" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Optimal Trading Execution System with Reinforcement Learning</h3>
+          <p class="project-description">Implementation of the Almgren-Chriss model for optimal trade execution, enhanced with a Reinforcement Learning agent to minimize market impact.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Reinforcement Learning</span>
+            <span class="tag">Quantitative Finance</span>
+          </div>
+          <a href="https://github.com/varunbudati/Almgren-Chriss-model" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/MACD.gif') }}" alt="MACD Trading Strategy Visualizer" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">MACD Trading Strategy Visualizer</h3>
+          <p class="project-description">An interactive web application to visualize the MACD indicator and backtest trading strategies on historical stock data.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Technical Analysis</span>
+          </div>
+          <a href="https://github.com/varunbudati/MACD-Trading-Strategy-Visualizer" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/VideoPoker.gif') }}" alt="Video Poker" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Video Poker</h3>
+          <p class="project-description">A classic Video Poker game built with a clean interface, focusing on probability and game theory.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Pygame</span>
+            <span class="tag">Game Development</span>
+          </div>
+          <a href="https://github.com/varunbudati/VideoPoker" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/Crash_Car.gif') }}" alt="Crash Car" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Crash Car</h3>
+          <p class="project-description">A simple and fun 2D car racing game developed to demonstrate object-oriented programming principles.</p>
+          <div class="project-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML5 Canvas</span>
+            <span class="tag">Game Development</span>
+          </div>
+          <a href="https://github.com/varunbudati/Crash_Car" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="{{ url_for('static', filename='images/BSM_options.gif') }}" alt="Options Pricing Calculator" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Options Pricing Calculator &amp; Graph Using the Black-Scholes Model</h3>
+          <p class="project-description">A tool for pricing European options using the Black-Scholes model, with visualizations for the Greeks.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Quantitative Finance</span>
+            <span class="tag">Streamlit</span>
+          </div>
+          <a href="https://github.com/varunbudati/Black-Sholes-Model" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
