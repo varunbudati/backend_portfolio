@@ -1,62 +1,96 @@
-# My Personal Website (Render Edition)
+# Varun Budati Portfolio
 
-The app serves the production-ready UI from the previous static site and augments it with live market telemetry backed by `yfinance`.
+Full-stack personal portfolio with Next.js frontend and Flask backend for live market data.
+
+## Architecture
+
+```
+backend_portfolio/
+├── app.py                # Flask backend API (Python)
+├── requirements.txt      # Python dependencies
+├── frontend/             # Next.js React frontend
+│   ├── app/              # Next.js app router pages
+│   ├── components/       # React components
+│   └── public/           # Static assets
+└── static/               # Legacy Flask static files
+```
 
 ## Features
 
-- 🎨 Modern responsive interface with dark/light theming, swipeable gallery, and animated terminal-style skills readout.
-- 📈 Financial dashboard featuring real-time market ticker, macro indices, and historical performance charts (falls back gracefully when APIs are unreachable).
-- 🧠 All interactive behaviours (theme toggle, slider autoplay, lightbox, filtering, Chart.js visualizations) carried over intact from the original `varunbudati.github.io` project.
-- ☁️ Flask backend exposes `/ticker`, `/market-indices`, and `/historical-data` endpoints for live data; ready to deploy on Render with Gunicorn.
+### Frontend (Next.js)
+- 🎨 Modern responsive interface with dark theme
+- 📈 Trading Simulator with live price chart
+- 🧠 Quant Interview Quiz
+- 🎰 Kelly Criterion Calculator
+- 🎲 Monte Carlo Simulator
+- ✨ Floating dock navigation
+- 🖱️ Custom cursor with spotlight effects
 
-## Project Structure
-
-```
-personal website/
-├── app.py                # Flask application with HTML route + data APIs
-├── requirements.txt      # Production dependencies (Flask, gunicorn, yfinance, pandas, numpy)
-├── templates/
-│   └── index.html        # Main portfolio page (Jinja2 template)
-└── static/
-    ├── css/              # Extracted style bundles (`style.css`, `quant.css`)
-    ├── js/               # Front-end behaviour (`script.js`, `quant.js`)
-    └── images/           # Favicons, portraits, GIFs, PDFs, and other assets
-```
+### Backend (Flask API)
+- `/ticker` — Real-time stock/crypto quotes (Finnhub, CoinGecko)
+- `/market-indices` — S&P 500, NASDAQ, VIX, 10Y Treasury
+- `/historical-data` — 6-month historical charts
 
 ## Local Development
 
-```powershell
-cd "c:\Users\varun\OneDrive\Desktop\GitHub Projects\personal website"
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python app.py
+### Frontend (Next.js)
+```bash
+cd frontend
+npm install
+npm run dev
+# Runs on http://localhost:3000
 ```
 
-Visit <http://127.0.0.1:5000> to explore the site locally. The Flask dev server proxies the front-end and serves market data APIs. Logs will show any `yfinance` fallbacks triggered when offline.
+### Backend (Flask)
+```bash
+python -m venv .venv
+source .venv/bin/activate  # or .\.venv\Scripts\Activate.ps1 on Windows
+pip install -r requirements.txt
+python app.py
+# Runs on http://localhost:5000
+```
 
-## Deploying to Render
+## Deployment (Hetzner VPS)
 
-1. Push this folder to a Git repo (or keep it inside an existing monorepo).
-2. Create a new **Web Service** in Render pointing to the repo path.
-3. Set the start command to `gunicorn app:app` (Render detects `requirements.txt` automatically).
-4. Optional: enable auto-deploy from your main branch for CI/CD.
+### Using Docker Compose (Recommended)
+```bash
+docker-compose up -d
+```
 
-> **Note:** `yfinance` calls Yahoo Finance directly. Render's free tier allows outbound HTTPS requests, but rate limits apply. The app gracefully serves cached fallback data whenever requests fail.
+### Manual Deployment
+1. Build the Next.js frontend:
+   ```bash
+   cd frontend && npm run build
+   ```
+
+2. Run Flask with Gunicorn:
+   ```bash
+   gunicorn app:app --bind 0.0.0.0:5000
+   ```
+
+3. Configure nginx as reverse proxy (see nginx.conf)
+
+## Environment Variables
+
+```env
+FINNHUB_API_KEY=your_finnhub_api_key
+```
 
 ## API Endpoints
 
-- `GET /` – Portfolio page (renders `templates/index.html`).
-- `GET /ticker` – Latest quotes for the configured ticker basket.
-- `GET /market-indices` – Macro index snapshot (S&P 500, NASDAQ, VIX, 10Y Treasury).
-- `GET /historical-data` – Six-month rolling window for Chart.js visualizations.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Serves the portfolio homepage |
+| `/ticker` | GET | Live stock/crypto ticker data |
+| `/market-indices` | GET | Major market indices |
+| `/historical-data` | GET | 6-month historical chart data |
 
-Each endpoint returns JSON and automatically switches to deterministic synthetic data when Yahoo Finance is unavailable.
+## Tech Stack
 
-## Next Steps
+- **Frontend**: Next.js 15, React 19, TypeScript, Framer Motion
+- **Backend**: Flask, Gunicorn, Python 3.11+
+- **APIs**: Finnhub, CoinGecko, yfinance
+- **Deployment**: Docker, nginx, Hetzner VPS
 
-- Add a contact form backend (e.g., use SendGrid, Formspree, or a simple email webhook).
-- Cache finance responses with Redis or simple in-memory storage to reduce API pressure.
-- Extend the dashboard with portfolio analytics backed by your trading datasets.
-
-Enjoy the upgraded home for your quant adventures! 🚀
+---
+Built by Varun Budati 🚀

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack Game - Varun Budati</title>
+
+  <link rel="shortcut icon" href="/legacy/static/images/logo.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/legacy/static/css/style.css">
+  <link rel="stylesheet" href="/legacy/static/css/quant.css">
+  <link rel="stylesheet" href="/legacy/static/css/poker.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="theme-dark">
+  <main>
+    <div class="poker-container">
+      <div class="poker-header">
+        <h1>🃏 Blackjack 🃏</h1>
+        <a href="/" class="back-btn">← Back to Portfolio</a>
+      </div>
+
+      <div class="poker-game">
+        <!-- Dealer Area -->
+        <div class="dealer-section">
+          <h3>Dealer's Hand</h3>
+          <div class="dealer-cards" id="dealerCards"></div>
+          <p class="dealer-hand">Dealer Score: <span id="dealerScore">0</span></p>
+        </div>
+
+        <!-- Player Area -->
+        <div class="player-section">
+          <div class="player-info">
+            <h3>Your Hand</h3>
+            <p>Chips: <span id="playerChips">1000</span></p>
+            <p>Bet: <span id="playerBet">0</span></p>
+          </div>
+          <div class="player-cards" id="playerCards"></div>
+          <p class="player-hand">Your Score: <span id="playerScore">0</span></p>
+        </div>
+
+        <!-- Game Status -->
+        <div class="game-status">
+          <p id="gameMessage">Welcome to Blackjack! Place your bet and click Deal.</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="poker-controls">
+          <input type="number" id="betAmount" placeholder="Bet amount" min="10" max="500" value="50">
+          <button id="dealBtn" class="btn btn-primary">Deal</button>
+          <button id="hitBtn" class="btn btn-success" disabled>Hit</button>
+          <button id="standBtn" class="btn btn-warning" disabled>Stand</button>
+          <button id="doubleBtn" class="btn btn-secondary" disabled>Double Down</button>
+        </div>
+
+        <!-- Game Result -->
+        <div class="game-result" id="gameResult"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/legacy/static/js/blackjack.js"></script>
+</body>
+
+</html>

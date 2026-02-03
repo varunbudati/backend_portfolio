@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Varun Budati</title>
+
+  <link rel="shortcut icon" href="/legacy/static/images/logo.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/legacy/static/css/style.css">
+  <link rel="stylesheet" href="/legacy/static/css/quant.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body class="theme-dark">
+  <div class="market-ticker">
+    <div class="ticker-container" id="ticker-container"></div>
+  </div>
+
+  <main>
+    <aside class="sidebar" data-sidebar>
+      <div class="sidebar-info">
+        <figure class="avatar-box">
+          <img src="/legacy/static/images/varun-budati.jpeg" alt="Varun Budati" width="80">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Varun Budati">Varun Budati</h1>
+          <p class="title">Undergraduate at Virginia Tech</p>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+      </div>
+
+      <div class="sidebar-info_more">
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+              <a href="mailto:varunsbudati@gmail.com" class="contact-link">varunsbudati@gmail.com</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+              <a href="tel:+15718300505" class="contact-link">+1 (571)-830-0505</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">LinkedIn</p>
+              <a href="https://www.linkedin.com/in/varun-budati/" class="contact-link">linkedin.com/varun-budati</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+              <address>Blacksburg, Virginia, USA</address>
+            </div>
+          </li>
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+          <li class="social-item">
+            <a href="https://github.com/varunbudati" class="social-link">
+              <ion-icon name="logo-github"></ion-icon>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://www.linkedin.com/in/varun-budati/" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <button class="navbar-link active" data-nav-link>About</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Resume</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Projects</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Contact</button>
+          </li>
+          <li class="navbar-item">
+            <a href="/legacy/blackjack.html" class="navbar-link" title="Play Blackjack">🃏 Blackjack</a>
+          </li>
+          <li class="navbar-item" style="margin-left:auto">
+            <button class="navbar-link" id="theme-toggle" title="Toggle theme">
+              <ion-icon name="moon"></ion-icon>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- About Section -->
+      
+<article class="about active" data-page="about">
+  <header>
+    <h2 class="h2 article-title">About me</h2>
+  </header>
+
+  <section class="about-text" data-typewriter data-typewriter-speed="28" data-typewriter-comma-pause="130" data-typewriter-sentence-pause="340" data-typewriter-initial-delay="450">
+    <div id="about-typewriter-output" class="typewriter-output" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="typewriter-source" data-typewriter-source>
+      <p>I've always enjoyed finding the overlap between different fields, and for me, that's been combining my computer science and math background with finance. What I really like is taking an idea, whether it's from a class or a paper, and actually building it out to see how it works in the real world.</p>
+      <p>My research role at the Dataism Lab has been a great place to do that. I spend my time digging into crypto trade data to understand its structure and then use what I find to build and test different trading algorithms. It's been cool to start with the fundamentals, like coding VWAP and TWAP from scratch, but I've also had the chance to dive into more complex topics like using reinforcement learning to make an agent that can adapt to the market on its own.</p>
+      <p>On the side, I like to build my own projects just to try things out. I put together a sports prediction model, mostly as a fun way to get better at finding small statistical edges and to teach myself about risk management, like using the Kelly Criterion. I also find that competitions are a great way to learn—the IMC Prosperity challenge was basically a crash course in market-making under pressure.</p>
+      <p>I know the technical skills are just one piece of the puzzle, though. That's why I'm studying for the CFA Level 1 exam and am active in our FinTech club; I want to make sure I have a solid grasp of the finance side of things, not just the code.</p>
+    </div>
+  </section>
+
+  <section class="service">
+  <h3 class="h3 service-title">Events</h3>
+
+  <div class="about-text">
+  </div>
+
+  <div class="interest-slider events-gallery" id="events-slider" data-gallery="events" data-gallery-slider aria-label="Events slideshow" role="region">
+    <figure class="slide gallery-item active">
+      <img src="/legacy/static/images/events/1743677374010.jpg" alt="Event highlight photograph" loading="lazy" />
+      <figcaption>DLQF Lab</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/DSC_0593-845x684.jpeg" alt="Crowd scene from an event" loading="lazy" />
+      <figcaption>REACH Lab</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/DSC_0667.jpeg" alt="Event photo with colleagues" loading="lazy" />
+      <figcaption>Symposium Summer 2026 w/MAOP</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/DSC_0799.jpeg" alt="Speaker on stage during an event" loading="lazy" />
+      <figcaption>MAOP Group 2026</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/DSC_0901.jpeg" alt="Networking area at an event" loading="lazy" />
+      <figcaption>MAOP & REACH Lab </figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/IMG_3724.JPG" alt="Group celebrating at an event" loading="lazy" />
+      <figcaption>GobblerFest w/FinTech Club Fall 2025</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/IMG_7613.jpg" alt="Outdoor event moment" loading="lazy" />
+      <figcaption>NYC Trip</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/events/Media-1500x430.jpeg" alt="Event banner and branding" loading="lazy" />
+      <figcaption>REACH Lab</figcaption>
+    </figure>
+  </div>
+
+  <div class="gallery-lightbox" data-gallery-lightbox="events" aria-hidden="true" role="dialog" aria-label="Events gallery viewer">
+    <div class="glb-content">
+      <button class="glb-btn glb-close" type="button" aria-label="Close">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      <button class="glb-btn glb-prev" type="button" aria-label="Previous image">
+        <ion-icon name="chevron-back"></ion-icon>
+      </button>
+      <img class="glb-image" data-lightbox-img alt="Gallery image" />
+      <button class="glb-btn glb-next" type="button" aria-label="Next image">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+    <div class="glb-caption" data-lightbox-caption></div>
+  </div>
+</section>
+
+  <section class="service">
+  <h3 class="h3 service-title">My Kittens!</h3>
+
+  <div class="interest-slider interest-gallery" id="interest-slider" data-gallery="kittens" data-gallery-slider aria-label="Interests slideshow" role="region">
+    <figure class="slide gallery-item active">
+      <img src="/legacy/static/images/cat-images/web/IMG_5870.jpg" alt="Kitten lounging on a blanket" loading="lazy" />
+      <figcaption>Cozy Lounger</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_5913.jpg" alt="Close-up portrait of a curious kitten" loading="lazy" />
+      <figcaption>Curious Portrait</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_5918.jpg" alt="Kitten watching through a window" loading="lazy" />
+      <figcaption>Window Watcher</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6076.jpg" alt="Playful kitten with a toy" loading="lazy" />
+      <figcaption>Playtime</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6150.jpg" alt="Adventurous kitten exploring outdoors" loading="lazy" />
+      <figcaption>Backyard Explorer</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6179.jpg" alt="Kitten relaxing on a cushion" loading="lazy" />
+      <figcaption>Sunny Rest</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6228.jpg" alt="Kitten looking up with bright eyes" loading="lazy" />
+      <figcaption>Bright Eyes</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6300.jpg" alt="Kitten stretching out comfortably" loading="lazy" />
+      <figcaption>Morning Stretch</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6305.jpg" alt="Kitten sitting attentively" loading="lazy" />
+      <figcaption>Attentive Pose</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6378.jpg" alt="Kitten peeking over a ledge" loading="lazy" />
+      <figcaption>Peekaboo</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6409.jpg" alt="Kitten lying on patterned fabric" loading="lazy" />
+      <figcaption>Patterned Paws</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6514.jpg" alt="Kitten gazing off camera" loading="lazy" />
+      <figcaption>Soft Gaze</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6650.jpg" alt="Kitten curled into a ball" loading="lazy" />
+      <figcaption>Curled Up</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6673.jpg" alt="Kitten with bright sunlight" loading="lazy" />
+      <figcaption>Sunlit Whiskers</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6730.jpg" alt="Kitten ready to pounce" loading="lazy" />
+      <figcaption>Ready to Pounce</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6747.jpg" alt="Kitten lounging on the floor" loading="lazy" />
+      <figcaption>Floor Lounger</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6784.jpg" alt="Kitten resting near a window" loading="lazy" />
+      <figcaption>Window Nap</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6786.jpg" alt="Kitten staring intently" loading="lazy" />
+      <figcaption>Focused Friend</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6821.jpg" alt="Kitten curled on a sofa" loading="lazy" />
+      <figcaption>Sofa Snuggle</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6852.jpg" alt="Kitten resting with paws tucked" loading="lazy" />
+      <figcaption>Paws Tucked</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6883.jpg" alt="Kitten basking in sunlight" loading="lazy" />
+      <figcaption>Sunbeam Dream</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6890.jpg" alt="Kitten relaxing on a rug" loading="lazy" />
+      <figcaption>Rug Lounge</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6897.jpg" alt="Kitten stretching paws" loading="lazy" />
+      <figcaption>Paw Stretch</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_6976.jpg" alt="Kitten relaxing by a window" loading="lazy" />
+      <figcaption>Window Lounge</figcaption>
+    </figure>
+    <figure class="slide gallery-item">
+      <img src="/legacy/static/images/cat-images/web/IMG_7046.jpg" alt="Kitten with gentle expression" loading="lazy" />
+      <figcaption>Gentle Gaze</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="gallery-lightbox" id="interest-lightbox" data-gallery-lightbox="kittens" aria-hidden="true" role="dialog" aria-label="Interests gallery viewer">
+  <div class="glb-content">
+    <button class="glb-btn glb-close" type="button" aria-label="Close">
+      <ion-icon name="close"></ion-icon>
+    </button>
+    <button class="glb-btn glb-prev" type="button" aria-label="Previous image">
+      <ion-icon name="chevron-back"></ion-icon>
+    </button>
+    <img class="glb-image" data-lightbox-img alt="Gallery image" />
+    <button class="glb-btn glb-next" type="button" aria-label="Next image">
+      <ion-icon name="chevron-forward"></ion-icon>
+    </button>
+  </div>
+  <div class="glb-caption" data-lightbox-caption></div>
+</div>
+
+</article>
+
+
+
+      <!-- Resume Section -->
+      
+<article class="resume" data-page="resume">
+  <div class="header">
+    <header>
+      <h2 class="h2 article-title">Resume</h2>
+    </header>
+    <button id="view-resume-btn" class="download-button" type="button">View Resume</button>
+  </div>
+
+  <!-- Resume Modal -->
+  <div id="resume-modal" class="resume-modal">
+    <div class="resume-modal-content">
+      <div class="resume-modal-header">
+        <h3>Resume Preview</h3>
+        <button id="close-resume-modal" class="resume-modal-close" type="button">&times;</button>
+      </div>
+      <div class="resume-modal-body">
+        <iframe id="resume-iframe" src="/legacy/static/images/Varun_Budati_Resume.pdf" type="application/pdf"></iframe>
+      </div>
+      <div class="resume-modal-footer">
+        <a href="/legacy/static/images/Varun_Budati_Resume.pdf" class="download-link" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="timeline">
+  <div class="title-wrapper">
+    <div class="icon-box">
+      <ion-icon name="book-outline"></ion-icon>
+    </div>
+    <h3 class="h3">Education</h3>
+  </div>
+
+  <ol class="timeline-list">
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Virginia Tech</h4>
+      <span>Aug 2023 — May 2027</span>
+      <p class="timeline-text">Bachelor of Science in Computer Science with a Minor in Mathematics and Finance</p>
+      <p class="timeline-text">GPA: 3.61 / 4.0</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">IES Bhavans, Kuwait</h4>
+      <span>Jan 2010 — May 2023</span>
+      <p class="timeline-text">Senior School Certificate Examination in Computer Science GPA: 91.2/100</p>
+      <p class="timeline-text">Secondary School Examination in Information Technology GPA: 94.3/100</p>
+    </li>
+  </ol>
+</section>
+
+  <section class="timeline">
+  <div class="title-wrapper">
+    <div class="icon-box">
+      <ion-icon name="book-outline"></ion-icon>
+    </div>
+    <h3 class="h3">Experience</h3>
+  </div>
+
+  <ol class="timeline-list">
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Treasurer — FinTech Club</h4>
+      <span>Jun 2025 — Present · 4 mos</span>
+      <p class="timeline-text">• Manage the club's budget and all financial operations to fund initiatives and workshops for a community of 100+ members.</p>
+      <p class="timeline-text">• Organize and host speaker events with industry professionals from leading finance and technology firms to create career development and networking opportunities.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Quantitative Researcher</h4>
+      <span>Oct 2024 — Present</span>
+      <p class="timeline-text">• Researching optimal order execution by analyzing the market microstructure of Bitcoin trade data to develop and implement advanced trading strategies.</p>
+      <p class="timeline-text">• Constructed benchmark execution algorithms in Python, including VWAP and TWAP, to analyze the market impact and transaction costs of trading Bitcoin.</p>
+      <p class="timeline-text">• Engineered a reinforcement learning and neural network architecture (PPO, DDQN) to create an adaptive agent that optimizes trade execution strategies in real-time.</p>
+      <p class="timeline-text">• Modeling quantitative performance using statistical methods and Python (NumPy, Pandas, SciPy) to analyze trade execution efficiency and market dynamics.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Market Research Analyst — FinTech Club</h4>
+      <span>Aug 2024 — Present · 1 yr 2 mos</span>
+      <p class="timeline-text">• Led a project under Dr. Daniel Rodriguez replicating Evans &amp; Archer (1968) via Python simulation, analyzing portfolio diversification and risk reduction.</p>
+      <p class="timeline-text">• Utilized Pandas, NumPy, and SciPy on historical stock data to model risk (std dev log returns) vs. portfolio size, quantifying diversification benefits.</p>
+      <p class="timeline-text">• Demonstrated and presented findings confirming that most unsystematic risk is mitigated with 10-20 assets, aligning with the foundational study.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Summer Researcher, Virginia Tech MAOP Program</h4>
+      <span>May 2025 — Jul 2025</span>
+      <p class="timeline-text">• Conducted a mixed-methods research study on pedagogical patterns in introductory Computer Science (CS1) to identify opportunities for improving student retention and engagement.</p>
+      <p class="timeline-text">• Analyzed a corpus of examples from CS1 textbooks of top-tier universities (MIT, UC Berkeley, CalTech) to understand current teaching paradigms.</p>
+      <p class="timeline-text">• Developed a quantitative framework with eight distinct categories through an open coding process to classify the thematic focus of programming examples.</p>
+      <p class="timeline-text">• Utilized computational text analysis software (LIWC-22) and large language models to quantitatively assess the linguistic and contextual nature of course materials.</p>
+      <p class="timeline-text">• Synthesized findings to reveal a high prevalence (57%) of abstract mathematical examples, providing data-driven recommendations for incorporating more culturally relevant and real-world applications in curricula.</p>
+      <p class="timeline-text">• Co-authored and designed a formal research poster, effectively communicating the project's methodology, results, and implications to an academic audience.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Research Mentor — REACH Lab</h4>
+      <span>Jan 2025 — Jun 2025 · 6 mos</span>
+      <p class="timeline-text">• Guided undergraduate researchers within the Reimagining Equity and Accessibility in Computing for Humanity (REACH) Lab at Virginia Tech.</p>
+      <p class="timeline-text">• Mentored peers on literature review best practices, database search strategies, and synthesizing findings for equitable computing research.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">Undergraduate Research Assistant — REACH Lab</h4>
+      <span>Mar 2024 — Jun 2025 · 1 yr 4 mos</span>
+      <p class="timeline-text"><em>Blacksburg, Virginia, United States · Hybrid</em></p>
+      <p class="timeline-text">• Conducted an extensive literature review under the leadership of Dr. Ihudiya Finda Williams on Rural Computer Science Education.</p>
+      <p class="timeline-text">• Synthesized over 80 articles to support a $500,000 National Science Foundation grant proposal.</p>
+      <p class="timeline-text">• Trained six research assistants on database search methodologies, prompt design for scholarly queries, and rigorous literature review techniques.</p>
+    </li>
+
+    <li class="timeline-item">
+      <h4 class="h4 timeline-item-title">IMC Trading Competition — Top 15 US (0.005%)</h4>
+      <span>Apr 2025</span>
+      <p class="timeline-text">• Placed 15th in the US out of 12,600 teams in IMC's Prosperity 3 trading competition, designing strategies for multi-asset markets.</p>
+      <p class="timeline-text">• Optimized trade execution under latency constraints by engineering fair value estimators (VWAP, EMA, stochastic modeling) and implementing dynamic bid shading.</p>
+      <p class="timeline-text">• Designed signal-driven market-making strategies by analyzing mean-reversion patterns and synthetic mispricing via exploratory data analysis (rolling z-scores, spread compression, correlation clustering).</p>
+    </li>
+  </ol>
+</section>
+
+  <section class="terminal-section">
+  <h3 class="h3 skills-title">My Skills</h3>
+  <div class="terminal" id="terminal"></div>
+</section>
+
+</article>
+
+
+
+      <!-- Projects Section -->
+      
+<article class="projects" data-page="projects">
+  <header>
+    <h2 class="h2 article-title">Projects</h2>
+  </header>
+
+  <section class="financial-dashboard">
+  <h3 class="h3">Roulette Simulator</h3>
+
+  <div class="financial-graph">
+    <div class="roulette-wrapper">
+      <div class="roulette-wheel-container">
+        <div class="roulette-pointer" aria-hidden="true"></div>
+        <div class="roulette-wheel" id="roulette-wheel"></div>
+      </div>
+      <div class="roulette-controls">
+        <h4 class="roulette-title">Roulette Spin Simulator</h4>
+        <p class="roulette-description">Spin the wheel to generate a random draw. Perfect for testing probability intuition during research breaks.</p>
+        <button type="button" class="spin-button" id="spin-button">Spin</button>
+        <div class="roulette-result" id="roulette-result" aria-live="polite">Spin to play</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="financial-data">
+    <div class="data-row" data-symbol="^GSPC">
+      <span class="data-label">S&amp;P 500</span>
+      <span class="data-value">
+        <span id="sp500-value" class="data-primary">Loading…</span>
+        <span id="sp500-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^IXIC">
+      <span class="data-label">NASDAQ</span>
+      <span class="data-value">
+        <span id="nasdaq-value" class="data-primary">Loading…</span>
+        <span id="nasdaq-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^VIX">
+      <span class="data-label">VIX</span>
+      <span class="data-value">
+        <span id="vix-value" class="data-primary">Loading…</span>
+        <span id="vix-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="data-row" data-symbol="^TNX">
+      <span class="data-label">10Y Treasury</span>
+      <span class="data-value">
+        <span id="treasury-value" class="data-primary">Loading…</span>
+        <span id="treasury-change" class="market-change" aria-live="polite">--</span>
+      </span>
+    </div>
+    <div class="market-panel-footer">
+      <span id="market-last-updated" class="market-last-updated" aria-live="polite">Fetching latest data…</span>
+      <button type="button" id="market-refresh-btn" class="market-refresh-btn" title="Refresh market data" aria-label="Refresh market data">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </div>
+  </div>
+</section>
+
+  <section class="projects">
+  <ul class="filter-list">
+    <li class="filter-item">
+      <button class="active" data-filter-btn>All</button>
+    </li>
+    <li class="filter-item">
+      <button data-filter-btn>Applications</button>
+    </li>
+  </ul>
+
+  <div class="filter-select-box">
+    <button class="filter-select" data-select>
+      <div class="select-value" data-selecct-value>Select category</div>
+      <div class="select-icon">
+        <ion-icon name="chevron-down"></ion-icon>
+      </div>
+    </button>
+
+    <ul class="select-list">
+      <li class="select-item">
+        <button data-select-item>All</button>
+      </li>
+      <li class="select-item">
+        <button data-select-item>Applications</button>
+      </li>
+    </ul>
+  </div>
+
+  <ul class="project-list">
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/sports_betting.gif" alt="Sports Betting Algorithm &amp; Analytics System" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Sports Betting Algorithm &amp; Analytics System</h3>
+          <p class="project-description">A sophisticated analytics system to identify profitable betting opportunities using statistical models and machine learning.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">Streamlit</span>
+          </div>
+          <a href="https://www.linkedin.com/in/varun-budati/details/projects/" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/Almgren_Chriss_Model.gif" alt="Optimal Trading Execution System" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Optimal Trading Execution System with Reinforcement Learning</h3>
+          <p class="project-description">Implementation of the Almgren-Chriss model for optimal trade execution, enhanced with a Reinforcement Learning agent to minimize market impact.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Reinforcement Learning</span>
+            <span class="tag">Quantitative Finance</span>
+          </div>
+          <a href="https://github.com/varunbudati/Almgren-Chriss-model" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/MACD.gif" alt="MACD Trading Strategy Visualizer" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">MACD Trading Strategy Visualizer</h3>
+          <p class="project-description">An interactive web application to visualize the MACD indicator and backtest trading strategies on historical stock data.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Technical Analysis</span>
+          </div>
+          <a href="https://github.com/varunbudati/MACD-Trading-Strategy-Visualizer" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/VideoPoker.gif" alt="Video Poker" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Video Poker</h3>
+          <p class="project-description">A classic Video Poker game built with a clean interface, focusing on probability and game theory.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Pygame</span>
+            <span class="tag">Game Development</span>
+          </div>
+          <a href="https://github.com/varunbudati/VideoPoker" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/Crash_Car.gif" alt="Crash Car" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Crash Car</h3>
+          <p class="project-description">A simple and fun 2D car racing game developed to demonstrate object-oriented programming principles.</p>
+          <div class="project-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML5 Canvas</span>
+            <span class="tag">Game Development</span>
+          </div>
+          <a href="https://github.com/varunbudati/Crash_Car" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="project-item active" data-filter-item data-category="applications">
+      <div class="project-card">
+        <figure class="project-img">
+          <img src="/legacy/static/images/BSM_options.gif" alt="Options Pricing Calculator" loading="lazy">
+        </figure>
+        <div class="project-content">
+          <h3 class="project-title">Options Pricing Calculator &amp; Graph Using the Black-Scholes Model</h3>
+          <p class="project-description">A tool for pricing European options using the Black-Scholes model, with visualizations for the Greeks.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Quantitative Finance</span>
+            <span class="tag">Streamlit</span>
+          </div>
+          <a href="https://github.com/varunbudati/Black-Sholes-Model" class="project-link" target="_blank" rel="noreferrer">View Project</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+</article>
+
+
+
+      <!-- Contact Section -->
+      
+<article class="contact" data-page="contact">
+  <header>
+    <h2 class="h2 article-title">Contact</h2>
+  </header>
+
+  <section class="mapbox" data-mapbox>
+    <figure>
+      <iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Virginia%20Tech+(Virginia%20Tech)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+    </figure>
+  </section>
+
+  <section class="contact-form">
+    <h3 class="h3 form-title">Contact Me</h3>
+
+    <form class="form" data-form data-mailto-form novalidate>
+      <div class="form-status" id="contact-status" role="status" aria-live="polite"></div>
+      <div class="input-wrapper">
+        <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+        <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+      </div>
+      <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
+      <button class="form-btn" type="submit" disabled data-form-btn>
+        <ion-icon name="paper-plane"></ion-icon>
+        <span>Send Message</span>
+      </button>
+    </form>
+  </section>
+</article>
+
+
+    </div>
+  </main>
+
+  <script src="/legacy/static/js/script.js" defer></script>
+  <script src="/legacy/static/js/quant.js" defer></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
