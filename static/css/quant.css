@@ -1003,3 +1003,164 @@ body.theme-light .events .event-notes {
 		right: 8px;
 	}
 }
+
+/* =========================
+   PERFORMANCE OPTIMIZATIONS
+   ========================= */
+
+/* Loading skeletons for instant perceived performance */
+.loading-skeleton {
+	background: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0.05) 25%,
+		rgba(255, 255, 255, 0.15) 50%,
+		rgba(255, 255, 255, 0.05) 75%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-shimmer 1.5s ease-in-out infinite;
+	border-radius: 4px;
+}
+
+@keyframes skeleton-shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+/* Skeleton variants */
+.skeleton-text {
+	height: 1em;
+	margin-bottom: 0.5em;
+}
+
+.skeleton-text-sm {
+	height: 0.75em;
+	width: 60%;
+}
+
+.skeleton-price {
+	height: 1.25em;
+	width: 80px;
+}
+
+/* Content visibility for better scrolling performance */
+.about,
+.resume,
+.projects,
+.contact {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 500px;
+}
+
+/* GPU acceleration for animated elements */
+.ticker-container,
+.roulette-wheel,
+.project-card,
+.navbar,
+.sidebar {
+	will-change: transform;
+	transform: translateZ(0);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.ticker-container {
+		animation: none;
+	}
+
+	.loading-skeleton {
+		animation: none;
+		background: rgba(255, 255, 255, 0.1);
+	}
+}
+
+/* Smooth fade-in for dynamically loaded content */
+.fade-in {
+	animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Cached data indicator */
+.cached-indicator {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: rgba(79, 209, 197, 0.6);
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
+.cached-indicator.stale {
+	background: rgba(251, 191, 36, 0.6);
+}
+
+/* Offline indicator */
+.offline-banner {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(239, 68, 68, 0.95);
+	color: white;
+	padding: 12px 24px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 500;
+	z-index: 9999;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	display: none;
+}
+
+.offline-banner.show {
+	display: block;
+	animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateX(-50%) translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
+	}
+}
+
+/* Optimized image loading */
+img {
+	content-visibility: auto;
+}
+
+/* Light theme skeleton adjustments */
+body.theme-light .loading-skeleton {
+	background: linear-gradient(
+		90deg,
+		rgba(0, 0, 0, 0.05) 25%,
+		rgba(0, 0, 0, 0.1) 50%,
+		rgba(0, 0, 0, 0.05) 75%
+	);
+	background-size: 200% 100%;
+}

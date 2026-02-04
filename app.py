@@ -4,10 +4,44 @@ import os
 
 import numpy as np
 import requests
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, make_response, request
 
 
 app = Flask(__name__)
+
+# Enable response compression for faster loading
+try:
+    from flask_compress import Compress
+    Compress(app)
+except ImportError:
+    pass  # flask-compress not installed, skip compression
+
+
+# Add caching headers for static assets and HTML
+@app.after_request
+def add_cache_headers(response):
+    """Add caching headers to responses for better performance."""
+    # Skip for errors
+    if response.status_code >= 400:
+        return response
+    
+    # Cache static assets aggressively (1 week)
+    if request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'public, max-age=604800, immutable'
+        return response
+    
+    # HTML pages: cache for 1 minute, stale-while-revalidate for 5 minutes
+    if response.content_type and 'text/html' in response.content_type:
+        response.headers['Cache-Control'] = 'public, max-age=60, stale-while-revalidate=300'
+        return response
+    
+    # API responses: cache for 15 seconds, stale-while-revalidate for 1 minute
+    if response.content_type and 'application/json' in response.content_type:
+        response.headers['Cache-Control'] = 'public, max-age=15, stale-while-revalidate=60'
+        return response
+    
+    return response
+
 
 # API Configuration
 FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")

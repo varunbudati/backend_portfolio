@@ -1,0 +1,19 @@
+{
+  "name": "Varun Budati Portfolio",
+  "short_name": "VB Portfolio",
+  "description": "Varun Budati - Undergraduate at Virginia Tech specializing in Quantitative Finance, Machine Learning, and Algo-Trading",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/images/logo.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["portfolio", "finance", "technology"],
+  "prefer_related_applications": false
+}

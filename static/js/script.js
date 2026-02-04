@@ -188,43 +188,61 @@ if (spinButton) {
   spinButton.addEventListener('click', spinRoulette);
 }
 
-// Populate ticker with data
+// Populate ticker with data - exposed globally for cache updates
 function populateTickerWithData(data) {
+  if (!tickerContainer) return;
+
   // Clear ticker
   tickerContainer.innerHTML = '';
-  
+
   data.forEach(item => {
     const tickerItem = document.createElement('div');
     tickerItem.className = 'ticker-item';
-    
+
     tickerItem.innerHTML = `
       <span class="ticker-symbol">${item.symbol}</span>
       <span class="ticker-price">$${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}</span>
       <span class="ticker-change ${item.isPositive ? 'positive' : 'negative'}">${item.change}</span>
     `;
-    
+
     tickerContainer.appendChild(tickerItem);
   });
 }
 
-// Fetch real market data from backend
+// Expose for cache update events
+window.populateTickerWithData = populateTickerWithData;
+
+// Fetch real market data from backend with caching
 async function fetchMarketData() {
   try {
+    // Use CacheManager if available for instant cached data
+    if (window.CacheManager) {
+      const result = await window.CacheManager.cachedFetch('/ticker');
+      populateTickerWithData(result.data);
+
+      if (result.fromCache && !result.fresh) {
+        console.log('[Ticker] Served stale cache, refreshing in background...');
+      }
+
+      return true;
+    }
+
+    // Fallback to regular fetch
     const response = await fetch('/ticker');
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    
+
     // Update ticker with real-time data
     populateTickerWithData(data);
-    
+
     return true;
   } catch (error) {
     console.error('Error fetching market data:', error);
     // If API fails, use initial data
     populateTickerWithData(initialMarketData);
-    
+
     return false;
   }
 }
@@ -246,12 +264,32 @@ async function updateMarketIndices(options = {}) {
   }
 
   try {
-    const response = await fetch('/market-indices', { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    let payload;
+    let fromCache = false;
+
+    // Use CacheManager for instant cached data (skip for user-initiated refresh)
+    if (window.CacheManager && !userInitiated) {
+      const result = await window.CacheManager.cachedFetch('/market-indices');
+      payload = result.data;
+      fromCache = result.fromCache;
+
+      if (fromCache && !result.fresh) {
+        console.log('[MarketIndices] Served stale cache, refreshing in background...');
+      }
+    } else {
+      // Direct fetch for user-initiated refresh
+      const response = await fetch('/market-indices', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      payload = await response.json();
+
+      // Store in cache for next time
+      if (window.CacheManager) {
+        window.CacheManager.setCache('/market-indices', payload, { ttl: 15000, staleTtl: 60000 });
+      }
     }
 
-    const payload = await response.json();
     let indices = [];
     if (payload && Array.isArray(payload.indices)) {
       indices = payload.indices;
@@ -294,7 +332,8 @@ async function updateMarketIndices(options = {}) {
         const updatedDate = new Date(payload.asOf);
         const timeString = updatedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const dateString = updatedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
-        marketLastUpdatedEl.textContent = `Last update: ${dateString} ${timeString}`;
+        const cacheIndicator = fromCache ? ' (cached)' : '';
+        marketLastUpdatedEl.textContent = `Last update: ${dateString} ${timeString}${cacheIndicator}`;
         marketLastUpdatedEl.dataset.timestamp = payload.asOf;
       } else {
         marketLastUpdatedEl.textContent = 'Last update: just now';
@@ -635,13 +674,13 @@ function initAboutTypewriter() {
   scheduleNext(initialDelay);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   initializeRoulette();
   initAboutTypewriter();
 
   const navigationLinks = document.querySelectorAll('[data-nav-link]');
   navigationLinks.forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
       if (this.innerHTML.toLowerCase() === 'projects') {
         setTimeout(() => {
           initializeRoulette();
@@ -660,26 +699,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Resume Modal Functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const viewResumeBtn = document.getElementById('view-resume-btn');
   const resumeModal = document.getElementById('resume-modal');
   const closeResumeModalBtn = document.getElementById('close-resume-modal');
 
   if (viewResumeBtn && resumeModal) {
     // Open modal
-    viewResumeBtn.addEventListener('click', function() {
+    viewResumeBtn.addEventListener('click', function () {
       resumeModal.classList.add('active');
       document.body.style.overflow = 'hidden';
     });
 
     // Close modal
-    closeResumeModalBtn.addEventListener('click', function() {
+    closeResumeModalBtn.addEventListener('click', function () {
       resumeModal.classList.remove('active');
       document.body.style.overflow = '';
     });
 
     // Close modal when clicking outside
-    resumeModal.addEventListener('click', function(e) {
+    resumeModal.addEventListener('click', function (e) {
       if (e.target === resumeModal) {
         resumeModal.classList.remove('active');
         document.body.style.overflow = '';
@@ -687,7 +726,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Close modal with ESC key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && resumeModal.classList.contains('active')) {
         resumeModal.classList.remove('active');
         document.body.style.overflow = '';

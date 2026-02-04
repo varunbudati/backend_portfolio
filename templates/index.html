@@ -6,13 +6,55 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Varun Budati</title>
+  <meta name="description"
+    content="Varun Budati - Undergraduate at Virginia Tech specializing in Quantitative Finance, Machine Learning, and Algo-Trading">
+  <meta name="theme-color" content="#1a1a2e">
+
+  <!-- Preload critical resources for faster loading -->
+  <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+  <link rel="preload" href="{{ url_for('static', filename='js/cache-manager.js') }}" as="script">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.coingecko.com">
+  <link rel="dns-prefetch" href="https://finnhub.io">
 
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/logo.ico') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+  <!-- Critical CSS inline for instant first paint -->
+  <style>
+    /* Critical above-the-fold styles for instant loading */
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+    }
+
+    .loading-skeleton {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+    }
+
+    @keyframes skeleton-shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .instant-show {
+      opacity: 1 !important;
+    }
+  </style>
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/quant.css') }}">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -143,10 +185,56 @@
     </div>
   </main>
 
+  <!-- Cache manager must load first to enable cached data serving -->
+  <script src="{{ url_for('static', filename='js/cache-manager.js') }}"></script>
   <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/quant.js') }}" defer></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- Service Worker Registration for offline support and caching -->
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/static/js/sw.js', { scope: '/' })
+          .then(function (registration) {
+            console.log('[App] Service Worker registered with scope:', registration.scope);
+
+            // Check for updates
+            registration.addEventListener('updatefound', function () {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', function () {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[App] New content available, refresh to update');
+                }
+              });
+            });
+          })
+          .catch(function (error) {
+            console.warn('[App] Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // Preload API data on page load using cache manager
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.CacheManager) {
+        window.CacheManager.preloadData(['/ticker', '/market-indices']);
+      }
+    });
+
+    // Listen for cache updates and refresh UI
+    window.addEventListener('cache-updated', function (event) {
+      const { url, data } = event.detail;
+      console.log('[App] Cache updated for:', url);
+
+      // Optionally trigger UI updates here
+      if (url === '/ticker' && window.populateTickerWithData) {
+        window.populateTickerWithData(data);
+      }
+    });
+  </script>
 </body>
 
 </html>
