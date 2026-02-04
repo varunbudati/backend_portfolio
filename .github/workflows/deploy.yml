@@ -13,13 +13,13 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HETZNER_HOST }}
+          username: ${{ secrets.HETZNER_USERNAME }}
+          key: ${{ secrets.HETZNER_SSH_KEY }}
           port: 22
           script: |
-            cd /var/www/backend_portfolio
+            cd /var/www/backend_portfolio_next
             git pull origin main
-            source venv/bin/activate
-            pip install -r requirements.txt
-            sudo systemctl restart portfolio
+            npm install
+            npm run build
+            pm2 restart portfolio-next
